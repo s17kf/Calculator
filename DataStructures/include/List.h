@@ -15,7 +15,8 @@ namespace data_structures {
         };
 
     public:
-        struct Iterator {
+        class Iterator {
+        public:
             Iterator &operator++() {
                 node = node->next;
                 return *this;
@@ -42,8 +43,25 @@ namespace data_structures {
             explicit Iterator(Node *node) : node(node) {
             }
 
-        private:
+        protected:
             Node *node;
+        };
+
+        class ReverseIterator : public Iterator {
+        public:
+            ReverseIterator &operator++() {
+                this->node = this->node->prev;
+                return *this;
+            }
+
+            ReverseIterator &operator++(int) {
+                Node *tmp = this->node;
+                this->node = this->node->prev;
+                return *tmp;
+            }
+
+            explicit ReverseIterator(Node *node) : Iterator(node) {
+            }
         };
 
         List() : mSize(0) {
@@ -53,14 +71,40 @@ namespace data_structures {
             afterLast->prev = beforeFirst;
         }
 
+        ~List() {
+            Node *node = beforeFirst;
+            while (node != nullptr) {
+                const Node *toDelete = node;
+                node = node->next;
+                delete toDelete;
+            }
+        }
+
         Iterator begin() { return ++Iterator(beforeFirst); }
         Iterator end() { return Iterator(afterLast); }
+        ReverseIterator rbegin() { return ++ReverseIterator(afterLast); }
+        ReverseIterator rend() { return ReverseIterator(beforeFirst); }
 
         const size_t &size() const { return mSize; }
 
-        void pushBack(T &data) {
-            if (mSize == 0) {
-            }
+        void pushBack(const T &data) {
+            Node *newNode = new Node{
+                .data = data,
+                .prev = afterLast->prev,
+                .next = afterLast
+            };
+            afterLast->prev->next = newNode;
+            afterLast->prev = newNode;
+        }
+
+        void pushFront(const T &data) {
+            Node *newNode = new Node{
+                .data = data,
+                .prev = beforeFirst,
+                .next = beforeFirst->next
+            };
+            beforeFirst->next->prev = newNode;
+            beforeFirst->next = newNode;
         }
 
     private:
