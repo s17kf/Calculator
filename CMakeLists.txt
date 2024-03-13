@@ -4,7 +4,9 @@ project(CalculatorAads)
 set(CMAKE_CXX_STANDARD 23)
 
 
-include_directories(DataStructures/include
+include_directories(
+        DataStructures/include
+        Calculator/include
         googletest/googletest/include
         googletest/googlemock/include)
 
@@ -14,10 +16,16 @@ set(TEST_SOURCES
         DataStructures/tests/StackTest.cpp
         DataStructures/tests/QueueTest.cpp)
 
+set(CALCULATOR_TEST_SOURCES
+        tests_main.cpp
+        Calculator/tests/SymbolTest.cpp)
+
 add_executable(CalculatorAads main.cpp
+        Calculator/src/InputReader.cpp
         DataStructures/include/List.h)
 
 add_subdirectory(googletest)
 link_libraries(gmock)
 
 add_executable(DataStructuresTests ${TEST_SOURCES})
+add_executable(CalculatorTests ${CALCULATOR_TEST_SOURCES})
