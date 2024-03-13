@@ -95,6 +95,7 @@ namespace data_structures {
             };
             afterLast->prev->next = newNode;
             afterLast->prev = newNode;
+            ++mSize;
         }
 
         void pushFront(const T &data) {
@@ -105,6 +106,43 @@ namespace data_structures {
             };
             beforeFirst->next->prev = newNode;
             beforeFirst->next = newNode;
+            ++mSize;
+        }
+
+        T &front() {
+            if (mSize == 0) {
+                throw std::out_of_range("Read (first) element from empty list!");
+            }
+            return beforeFirst->next->data;
+        }
+
+        T &back() {
+            if (mSize == 0) {
+                throw std::out_of_range("Read (last) element from empty list!");
+            }
+            return afterLast->prev->data;
+        }
+
+        void popFront() {
+            if (mSize == 0) {
+                throw std::out_of_range("Try to remove (last) element from empty list!");
+            }
+            Node *firstNode = beforeFirst->next;
+            beforeFirst->next = firstNode->next;
+            firstNode->next->prev = beforeFirst;
+            delete firstNode;
+            --mSize;
+        }
+
+        void popBack() {
+            if (mSize == 0) {
+                throw std::out_of_range("Try to remove (last) element from empty list!");
+            }
+            Node *lastNode = afterLast->prev;
+            afterLast->prev = lastNode->prev;
+            lastNode->prev->next = afterLast;
+            delete lastNode;
+            --mSize;
         }
 
     private:

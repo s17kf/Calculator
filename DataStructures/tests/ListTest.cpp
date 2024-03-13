@@ -35,6 +35,15 @@ TEST_F(ListTest, rangeBasedLoopOverEmptyList) {
     ASSERT_EQ(0, loopCounter);
 }
 
+TEST_F(ListTest, notEmptyListSize) {
+    list->pushBack(1);
+    list->pushBack(2);
+    list->pushBack(5);
+    list->pushFront(6);
+
+    ASSERT_EQ(4, list->size());
+}
+
 TEST_F(ListTest, listWithElementsAddedByPushBack) {
     std::list expectedList = {1, 2, 5};
     std::list<int> actualList;
@@ -92,3 +101,61 @@ TEST_F(ListTest, listBackwardsIteration) {
     ASSERT_EQ(expectedList, actualList);
 }
 
+TEST_F(ListTest, getFirstElementFromList) {
+    list->pushBack(1);
+    list->pushBack(2);
+    list->pushBack(5);
+
+    ASSERT_EQ(1, list->front());
+}
+
+TEST_F(ListTest, getLastElementFromList) {
+    list->pushBack(1);
+    list->pushBack(2);
+    list->pushBack(5);
+
+    ASSERT_EQ(5, list->back());
+}
+
+TEST_F(ListTest, getFirstElementFromEmptyListShouldThrow) {
+    ASSERT_THROW(list->front(), std::out_of_range);
+}
+
+TEST_F(ListTest, getLastElementFromEmptyListShouldThrow) {
+    ASSERT_THROW(list->back(), std::out_of_range);
+}
+
+TEST_F(ListTest, popFrontElement) {
+    list->pushBack(1);
+    list->pushBack(2);
+    list->pushBack(5);
+
+    list->popFront();
+    ASSERT_EQ(2, list->front());
+
+    list->popFront();
+    ASSERT_EQ(5, list->front());
+    ASSERT_EQ(1, list->size());
+}
+
+
+TEST_F(ListTest, popBackElement) {
+    list->pushBack(1);
+    list->pushBack(2);
+    list->pushBack(5);
+
+    list->popBack();
+    ASSERT_EQ(2, list->back());
+
+    list->popBack();
+    ASSERT_EQ(1, list->back());
+    ASSERT_EQ(1, list->size());
+}
+
+TEST_F(ListTest, popFrontFromEmptyListShouldThrow) {
+    ASSERT_THROW(list->popFront(), std::out_of_range);
+}
+
+TEST_F(ListTest, popBackFromEmptyListShouldThrow) {
+    ASSERT_THROW(list->popBack(), std::out_of_range);
+}
