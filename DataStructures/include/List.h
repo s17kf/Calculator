@@ -81,17 +81,22 @@ namespace data_structures {
         }
 
         Iterator begin() { return ++Iterator(beforeFirst); }
+
         Iterator end() { return Iterator(afterLast); }
+
         ReverseIterator rbegin() { return ++ReverseIterator(afterLast); }
+
         ReverseIterator rend() { return ReverseIterator(beforeFirst); }
 
         const size_t &size() const { return mSize; }
 
+        bool empty() const { return mSize == 0; }
+
         void pushBack(const T &data) {
             Node *newNode = new Node{
-                .data = data,
-                .prev = afterLast->prev,
-                .next = afterLast
+                    .data = data,
+                    .prev = afterLast->prev,
+                    .next = afterLast
             };
             afterLast->prev->next = newNode;
             afterLast->prev = newNode;
@@ -100,23 +105,23 @@ namespace data_structures {
 
         void pushFront(const T &data) {
             Node *newNode = new Node{
-                .data = data,
-                .prev = beforeFirst,
-                .next = beforeFirst->next
+                    .data = data,
+                    .prev = beforeFirst,
+                    .next = beforeFirst->next
             };
             beforeFirst->next->prev = newNode;
             beforeFirst->next = newNode;
             ++mSize;
         }
 
-        T &front() {
+        const T &front() const {
             if (mSize == 0) {
                 throw std::out_of_range("Read (first) element from empty list!");
             }
             return beforeFirst->next->data;
         }
 
-        T &back() {
+        const T &back() const {
             if (mSize == 0) {
                 throw std::out_of_range("Read (last) element from empty list!");
             }

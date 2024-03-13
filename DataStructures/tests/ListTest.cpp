@@ -12,7 +12,7 @@ using data_structures::List;
 
 class ListTest : public ::testing::Test {
 protected:
-    std::unique_ptr<List<int> > list;
+    std::unique_ptr<List<int>> list;
 
     void SetUp() override {
         list = std::make_unique<List<int> >();
@@ -25,6 +25,7 @@ protected:
 
 TEST_F(ListTest, emptyListTest) {
     ASSERT_EQ(0, list->size());
+    ASSERT_TRUE(list->empty());
 }
 
 TEST_F(ListTest, rangeBasedLoopOverEmptyList) {
@@ -36,16 +37,24 @@ TEST_F(ListTest, rangeBasedLoopOverEmptyList) {
 }
 
 TEST_F(ListTest, notEmptyListSize) {
-    list->pushBack(1);
-    list->pushBack(2);
-    list->pushBack(5);
-    list->pushFront(6);
+    ASSERT_TRUE(list->empty());
 
+    list->pushBack(1);
+    ASSERT_FALSE(list->empty());
+
+    list->pushBack(2);
+    ASSERT_FALSE(list->empty());
+
+    list->pushBack(5);
+    ASSERT_FALSE(list->empty());
+
+    list->pushFront(6);
+    ASSERT_FALSE(list->empty());
     ASSERT_EQ(4, list->size());
 }
 
 TEST_F(ListTest, listWithElementsAddedByPushBack) {
-    std::list expectedList = {1, 2, 5};
+    const std::list expectedList = {1, 2, 5};
     std::list<int> actualList;
 
     list->pushBack(1);
@@ -59,7 +68,7 @@ TEST_F(ListTest, listWithElementsAddedByPushBack) {
 }
 
 TEST_F(ListTest, listWithElementsAddedByPushFront) {
-    std::list expectedList = {5, 2, 1};
+    const std::list expectedList = {5, 2, 1};
     std::list<int> actualList;
 
     list->pushFront(1);
@@ -73,7 +82,7 @@ TEST_F(ListTest, listWithElementsAddedByPushFront) {
 }
 
 TEST_F(ListTest, listWithElementsAddedByPushFrontAndPushBack) {
-    std::list expectedList = {5, 2, 1, 7};
+    const std::list expectedList = {5, 2, 1, 7};
     std::list<int> actualList;
 
     list->pushBack(1);
@@ -88,7 +97,7 @@ TEST_F(ListTest, listWithElementsAddedByPushFrontAndPushBack) {
 }
 
 TEST_F(ListTest, listBackwardsIteration) {
-    std::list expectedList = {5, 2, 1};
+    const std::list expectedList = {5, 2, 1};
     std::list<int> actualList;
 
     list->pushBack(1);
