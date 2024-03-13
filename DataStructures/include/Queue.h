@@ -2,26 +2,26 @@
 // Created by stefan on 13/03/24.
 //
 
-#ifndef STACK_H
-#define STACK_H
+#ifndef CALCULATORAADS_QUEUE_H
+#define CALCULATORAADS_QUEUE_H
 
 #include "List.h"
 
 namespace data_structures {
 
     template<typename T>
-    class Stack {
+    class Queue {
     public:
         void push(const T &value) {
             data.pushBack(value);
         }
 
         void pop() {
-            data.popBack();
+            data.popFront();
         }
 
-        const T &top() const {
-            return data.back();
+        const T &front() const {
+            return data.front();
         }
 
         size_t size() const { return data.size(); }
@@ -34,4 +34,4 @@ namespace data_structures {
 
 } // data_structures
 
-#endif //STACK_H
+#endif //CALCULATORAADS_QUEUE_H

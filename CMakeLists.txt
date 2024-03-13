@@ -9,9 +9,10 @@ include_directories(DataStructures/include
         googletest/googlemock/include)
 
 set(TEST_SOURCES
-        DataStructures/tests/ListTest.cpp
         tests_main.cpp
-        DataStructures/tests/StackTest.cpp)
+        DataStructures/tests/ListTest.cpp
+        DataStructures/tests/StackTest.cpp
+        DataStructures/tests/QueueTest.cpp)
 
 add_executable(CalculatorAads main.cpp
         DataStructures/include/List.h)
