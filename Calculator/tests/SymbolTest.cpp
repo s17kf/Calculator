@@ -2,7 +2,7 @@
 // Created by stefan on 13/03/24.
 //
 
-#include <fstream>
+#include <sstream>
 #include "gtest/gtest.h"
 
 #include "Symbol.h"

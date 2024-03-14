@@ -18,7 +18,11 @@ set(TEST_SOURCES
 
 set(CALCULATOR_TEST_SOURCES
         tests_main.cpp
-        Calculator/tests/SymbolTest.cpp)
+        Calculator/tests/SymbolTest.cpp
+        Calculator/tests/InputReaderTest.cpp
+        Calculator/src/Symbol.cpp
+        Calculator/src/InputReader.cpp
+)
 
 add_executable(CalculatorAads main.cpp
         Calculator/src/InputReader.cpp

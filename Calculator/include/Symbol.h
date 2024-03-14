@@ -35,6 +35,10 @@ namespace calculator {
                     return "/";
             }
         }
+
+        bool operator==(const Operation &other) const {
+            return type == other.type;
+        }
     };
 
     struct Function {
@@ -56,6 +60,10 @@ namespace calculator {
                     return "MAX";
             }
         }
+
+        bool operator==(const Function &other) const {
+            return type == other.type;
+        }
     };
 
     struct Bracket {
@@ -73,12 +81,12 @@ namespace calculator {
                     return ")";
             }
         }
+
+        bool operator==(const Bracket &other) const {
+            return type == other.type;
+        }
     };
 
-    std::ostream &operator<<(std::ostream &stream, const Bracket bracket) {
-        stream << bracket.str();
-        return stream;
-    }
 
     union Token {
         int number;
@@ -94,29 +102,11 @@ namespace calculator {
         Token token;
     };
 
-    std::ostream &operator<<(std::ostream &stream, const Symbol symbol) {
-        switch (symbol.tokenType) {
-            case TokenType::number:
-                stream << symbol.token.number;
-                break;
-            case TokenType::operation:
-                stream << symbol.token.operation.str();
-                break;
-            case TokenType::function:
-                stream << symbol.token.function.str();
-                break;
-            case TokenType::bracket:
-                stream << symbol.token.bracket;
-                break;
-            case TokenType::comma:
-                stream << symbol.token.comma;
-                break;
-            case TokenType::end:
-                stream << symbol.token.end;
-                break;
-        }
-        return stream;
-    }
+    std::ostream &operator<<(std::ostream &stream, const Bracket &bracket);
+
+    std::ostream &operator<<(std::ostream &stream, const Symbol &symbol);
+
+    bool operator==(const Symbol &s1, const Symbol s2);
 
 } // calculator
 
