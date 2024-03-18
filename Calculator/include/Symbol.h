@@ -47,22 +47,38 @@ namespace calculator {
         };
 
         Type type;
+        uint argc;
 
         [[nodiscard]] const char *str() const {
             switch (type) {
-                case Type::condition:
-                    return "IF";
-                case Type::negation:
-                    return "N";
-                case Type::min:
-                    return "MIN";
-                case Type::max:
-                    return "MAX";
+                case Type::condition: {
+                    char *result = new char[4];
+                    sprintf(result, "IF");
+                    sprintf(&result[2], "%d", argc);
+                    return result;
+                }
+                case Type::negation: {
+                    char *result = new char[2];
+                    sprintf(result, "N");
+                    return result;
+                }
+                case Type::min: {
+                    char *result = new char[10];
+                    sprintf(result, "MIN");
+                    sprintf(&result[3], "%d", argc);
+                    return result;
+                }
+                case Type::max: {
+                    char *result = new char[10];
+                    sprintf(result, "MAX");
+                    sprintf(&result[3], "%d", argc);
+                    return result;
+                }
             }
         }
 
         bool operator==(const Function &other) const {
-            return type == other.type;
+            return type == other.type && argc == other.argc;
         }
     };
 
@@ -106,7 +122,11 @@ namespace calculator {
 
     std::ostream &operator<<(std::ostream &stream, const Symbol &symbol);
 
-    bool operator==(const Symbol &s1, const Symbol s2);
+    bool operator==(const Symbol &s1, const Symbol &s2);
+
+    bool operator<(const Operation &o1, const Operation &o2);
+
+    bool operator<=(const Operation &o1, const Operation &o2);
 
 } // calculator
 

@@ -22,6 +22,8 @@ set(CALCULATOR_TEST_SOURCES
         Calculator/tests/InputReaderTest.cpp
         Calculator/src/Symbol.cpp
         Calculator/src/InputReader.cpp
+        Calculator/src/InputConverter.cpp
+        Calculator/tests/InputConverterTest.cpp
 )
 
 add_executable(CalculatorAads main.cpp

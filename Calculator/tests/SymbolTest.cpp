@@ -16,7 +16,7 @@ using calculator::Bracket;
 
 class SymbolTest : public ::testing::Test {
 protected:
-    void verifyStreamResult(const Symbol &symbol, const std::string &expectedContent) {
+    static void verifyStreamResult(const Symbol &symbol, const std::string &expectedContent) {
         std::stringstream stream;
         stream << symbol;
         ASSERT_EQ(expectedContent, stream.str());
@@ -43,17 +43,20 @@ TEST_F(SymbolTest, SymbolStrTest) {
 
 
     Symbol condition{.tokenType=calculator::TokenType::function,
-            .token={.function={.type=Function::Type::condition}}};
+            .token={.function={.type=Function::Type::condition,
+                    .argc=0}}};
     Symbol negation{.tokenType=calculator::TokenType::function,
             .token={.function={.type=Function::Type::negation}}};
     Symbol min{.tokenType=calculator::TokenType::function,
-            .token={.function={.type=Function::Type::min}}};
+            .token={.function={.type=Function::Type::min,
+                    .argc=0}}};
     Symbol max{.tokenType=calculator::TokenType::function,
-            .token={.function={.type=Function::Type::max}}};
-    verifyStreamResult(condition, "IF");
+            .token={.function={.type=Function::Type::max,
+                    .argc=0}}};
+    verifyStreamResult(condition, "IF0");
     verifyStreamResult(negation, "N");
-    verifyStreamResult(min, "MIN");
-    verifyStreamResult(max, "MAX");
+    verifyStreamResult(min, "MIN0");
+    verifyStreamResult(max, "MAX0");
 
 
     Symbol bracketLeft{.tokenType = TokenType::bracket,

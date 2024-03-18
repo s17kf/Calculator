@@ -20,9 +20,12 @@ namespace calculator {
             case TokenType::operation:
                 stream << symbol.token.operation.str();
                 break;
-            case TokenType::function:
-                stream << symbol.token.function.str();
+            case TokenType::function: {
+                const char *functionStr = symbol.token.function.str();
+                stream << functionStr;
+                delete[] functionStr;
                 break;
+            }
             case TokenType::bracket:
                 stream << symbol.token.bracket;
                 break;
@@ -38,7 +41,7 @@ namespace calculator {
         return stream;
     }
 
-    bool operator==(const Symbol &s1, const Symbol s2) {
+    bool operator==(const Symbol &s1, const Symbol &s2) {
         if (s1.tokenType != s2.tokenType)
             return false;
         switch (s1.tokenType) {
@@ -54,5 +57,23 @@ namespace calculator {
             case TokenType::end:
                 return true;
         }
+    }
+
+    bool operator<(const Operation &o1, const Operation &o2) {
+        switch (o1.type) {
+            case Operation::Type::addition:
+            case Operation::Type::subtraction:
+                if (o2.type == Operation::Type::addition || o2.type == Operation::Type::subtraction)
+                    return false;
+                return true;
+            case Operation::Type::multiplying:
+            case Operation::Type::division:
+                return false;
+        }
+    }
+
+
+    bool operator<=(const Operation &o1, const Operation &o2) {
+        return o1 < o2 || o1 == o2;
     }
 }

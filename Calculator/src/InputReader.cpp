@@ -38,20 +38,24 @@ namespace calculator {
             case 'N':
                 if (strcmp(input, "N") == 0)
                     return new Symbol{.tokenType = TokenType::function,
-                            .token = {.function={.type=Function::Type::negation}}};
+                            .token = {.function={.type=Function::Type::negation,
+                                    .argc=0}}};
                 break;
             case 'I':
                 if (strcmp(input, "IF") == 0)
                     return new Symbol{.tokenType = TokenType::function,
-                            .token = {.function={.type=Function::Type::condition}}};
+                            .token = {.function={.type=Function::Type::condition,
+                                    .argc=3}}};
                 break;
             case 'M':
                 if (strcmp(input, "MIN") == 0)
                     return new Symbol{.tokenType = TokenType::function,
-                            .token = {.function={.type=Function::Type::min}}};
+                            .token = {.function={.type=Function::Type::min,
+                                    .argc=0}}};
                 else if (strcmp(input, "MAX") == 0)
                     return new Symbol{.tokenType = TokenType::function,
-                            .token = {.function={.type=Function::Type::max}}};
+                            .token = {.function={.type=Function::Type::max,
+                                    .argc=0}}};
                 break;
             default:
                 return new Symbol{.tokenType = TokenType::number,

@@ -41,3 +41,7 @@ TEST_F(StackTest, StackAddReadRemoveElement) {
 
     ASSERT_EQ(reversedData, readValues);
 }
+
+TEST_F(StackTest, ReadElementFromEmptyStack) {
+    EXPECT_THROW(stack->top(), std::out_of_range);
+}

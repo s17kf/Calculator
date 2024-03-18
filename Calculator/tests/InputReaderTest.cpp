@@ -22,7 +22,7 @@ class InputReaderTest : public ::testing::Test {
 protected:
 };
 
-TEST_F(InputReaderTest, ValidMultiTypeInputTest) {
+TEST_F(InputReaderTest, validMultiTypeInputTest) {
     const std::string inputExpression =
             "2 + MIN ( 100 , MAX ( 1 , 6 / 5 + 2 , 2 ) , N 80 ,  IF ( 66  , 35 , 77 ) , 50 , 60 ) * 3 .";
 
@@ -72,7 +72,8 @@ TEST_F(InputReaderTest, ValidMultiTypeInputTest) {
             {.tokenType = TokenType::comma,
                     .token = {.comma=','}},
             {.tokenType = TokenType::function,
-                    .token = {.function={.type=Function::Type::condition}}},
+                    .token = {.function={.type=Function::Type::condition,
+                                         .argc=3}}},
             {.tokenType = TokenType::bracket,
                     .token = {.bracket={.type=calculator::Bracket::Type::left}}},
             {.tokenType = TokenType::number,
