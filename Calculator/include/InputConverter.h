@@ -19,6 +19,13 @@ namespace calculator {
     public:
         explicit InputConverter(InputReader &inputReader) : inputReader(inputReader) {}
 
+        ~InputConverter() {
+            while (!outputQueue.empty()) {
+                delete outputQueue.front();
+                outputQueue.pop();
+            }
+        }
+
         void convertFormula();
 
         Symbol *removeNextSymbol();

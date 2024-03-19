@@ -30,7 +30,12 @@ namespace calculator {
                     stack.pop();
                     int b = stack.top();
                     stack.pop();
-                    stack.push(symbol->token.operation(a, b));
+                    try {
+                        stack.push(symbol->token.operation(a, b));
+                    } catch (std::overflow_error &e) {
+                        delete symbol;
+                        throw e;
+                    }
                     delete symbol;
                     break;
                 }

@@ -99,3 +99,24 @@ TEST_F(CalculatorTest, calculationGivesProperResults4) {
     ASSERT_EQ(-8, calculator->calculate());
     ASSERT_EQ(expectedOutput, outputStream.str());
 }
+
+TEST_F(CalculatorTest, calculationThrowsDivisionByZero) {
+    const std::string inputExpression =
+            "MIN ( MIN ( IF ( 0 , 8 , 2 ) ) , MAX ( MIN ( 9 ) , 4 + 9 ) , ( IF ( 3 , 9 , 9 ) / "
+            "MIN ( 7 , 0 , 6 , 2 , 1 ) ) , N ( 3 + 4 ) , 1 * 1 + IF ( 1 , 9 , 2 ) ) .";
+    inputStream.str(inputExpression);
+    const std::string expectedOutput =
+            "0  8  2  IF  MIN1  9  MIN1  4  9  +  MAX2  3  9  9  IF  7  0  6  2  1  MIN5  /  3  "
+            "4  +  N  1  1  *  1  9  2  IF  +  MIN5\n"
+            "IF 2 8 0\n"
+            "MIN1 2\n"
+            "MIN1 9 2\n"
+            "+ 9 4 9 2\n"
+            "MAX2 13 9 2\n"
+            "IF 9 9 3 13 2\n"
+            "MIN5 1 2 6 0 7 9 13 2\n"
+            "/ 0 9 13 2\n";
+
+    ASSERT_THROW(calculator->calculate(), std::overflow_error);
+    ASSERT_EQ(expectedOutput, outputStream.str());
+}
