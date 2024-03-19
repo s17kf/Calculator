@@ -1,7 +1,8 @@
 #include <iostream>
+#include "Calculator.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    calculator::Calculator::handleUser();
 
     return 0;
 }

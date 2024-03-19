@@ -22,6 +22,8 @@ namespace calculator {
 
         int calculate();
 
+        static void handleUser(std::istream &istream = std::cin, std::ostream &ostream = std::cout);
+
     private:
         inline void printCurrentOperation(data_structures::Stack<int> &stack, Symbol *operation) {
             ostream << *operation;

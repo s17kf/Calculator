@@ -34,6 +34,9 @@ namespace calculator {
                         stack.push(symbol->token.operation(a, b));
                     } catch (std::overflow_error &e) {
                         delete symbol;
+                        while (inputConverter.symbolsLeft()){
+                            inputConverter.removeNextSymbol();
+                        }
                         throw e;
                     }
                     delete symbol;
@@ -59,6 +62,23 @@ namespace calculator {
             ++loopCounter;
         }
         return stack.top();
+    }
+
+    void Calculator::handleUser(std::istream &istream, std::ostream &ostream) {
+        uint n;
+        istream >> n;
+
+        auto inputReader = InputReader(istream);
+        auto calculator = Calculator(inputReader, ostream);
+
+        for (uint i = 0; i < n; ++i) {
+            try {
+                int result = calculator.calculate();
+                std::cout << result << std::endl;
+            } catch (std::overflow_error &e) {
+                std::cout << "ERROR" << std::endl;
+            }
+        }
     }
 
 } // calculator

@@ -28,9 +28,15 @@ set(CALCULATOR_TEST_SOURCES
         Calculator/src/Calculator.cpp
 )
 
-add_executable(CalculatorAads main.cpp
+set(MAIN_SOURCES
+        main.cpp
+        Calculator/src/Calculator.cpp
+        Calculator/src/InputConverter.cpp
         Calculator/src/InputReader.cpp
-        DataStructures/include/List.h)
+        Calculator/src/Symbol.cpp
+)
+
+add_executable(CalculatorAads ${MAIN_SOURCES})
 
 add_subdirectory(googletest)
 link_libraries(gmock)
