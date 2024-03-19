@@ -35,7 +35,7 @@ namespace calculator {
                     } catch (std::overflow_error &e) {
                         delete symbol;
                         while (inputConverter.symbolsLeft()){
-                            inputConverter.removeNextSymbol();
+                            delete inputConverter.removeNextSymbol();
                         }
                         throw e;
                     }
