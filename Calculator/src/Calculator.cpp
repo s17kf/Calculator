@@ -20,7 +20,7 @@ namespace calculator {
             Symbol *symbol = inputConverter.removeNextSymbol();
             switch (symbol->tokenType) {
                 case TokenType::number:
-                    stack.push(symbol->token.number);
+                    stack.push(symbol->token->number);
                     delete symbol;
                     break;
                 case TokenType::operation: {
@@ -30,26 +30,26 @@ namespace calculator {
                     int b = stack.top();
                     stack.pop();
                     try {
-                        stack.push(symbol->token.operation(a, b));
+                        stack.push((*symbol->token->operation)(a, b));
                     } catch (std::overflow_error &e) {
                         delete symbol;
                         while (inputConverter.symbolsLeft()){
                             delete inputConverter.removeNextSymbol();
                         }
-                        throw e;
+                        throw;
                     }
                     delete symbol;
                     break;
                 }
                 case TokenType::function: {
                     printCurrentOperation(stack, symbol);
-                    unsigned int argc = symbol->token.function.argc;
+                    unsigned int argc = symbol->token->function->argc;
                     List<int> args;
                     while (argc--) {
                         args.pushBack(stack.top());
                         stack.pop();
                     }
-                    stack.push(symbol->token.function(args));
+                    stack.push((*symbol->token->function)(args));
                     delete symbol;
                     break;
                 }
@@ -72,9 +72,9 @@ namespace calculator {
         for (unsigned int i = 0; i < n; ++i) {
             try {
                 int result = calculator.calculate();
-                std::cout << result << std::endl;
+                ostream << result << std::endl;
             } catch (std::overflow_error &e) {
-                std::cout << "ERROR" << std::endl;
+                ostream << "ERROR" << std::endl;
             }
         }
     }

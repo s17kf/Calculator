@@ -20,7 +20,7 @@ namespace calculator {
     void InputConverter::handleOperation(Stack<Symbol *> &operatorStack, Symbol *lastSymbol) {
         while (!operatorStack.empty() &&
                operatorStack.top()->tokenType == TokenType::operation &&
-               lastSymbol->token.operation <= operatorStack.top()->token.operation) {
+               *lastSymbol->token->operation <= *operatorStack.top()->token->operation) {
             outputQueue.push(operatorStack.top());
             operatorStack.pop();
         }
@@ -42,7 +42,7 @@ namespace calculator {
             if (topSymbol->tokenType == TokenType::function) {
                 outputQueue.push(topSymbol);
                 operatorStack.pop();
-                if (topSymbol->token.function.type != Function::Type::negation)
+                if (topSymbol->token->function->type != Function::Type::negation)
                     argumentCounters.pop();
             }
         }
@@ -52,7 +52,7 @@ namespace calculator {
     void InputConverter::moveNegationsFromTopOfStackToOutput(data_structures::Stack<Symbol *> &operatorStack) {
         while (!operatorStack.empty() &&
                operatorStack.top()->tokenType == TokenType::function &&
-               operatorStack.top()->token.function.type == Function::Type::negation) {
+               operatorStack.top()->token->function->type == Function::Type::negation) {
             outputQueue.push(operatorStack.top());
             operatorStack.pop();
         }
@@ -60,7 +60,7 @@ namespace calculator {
 
     void InputConverter::convertFormula() {
         Stack<Symbol *> operatorStack;
-        Stack<uint *> argumentCounters;
+        Stack<unsigned int *> argumentCounters;
         Symbol *lastSymbol = inputReader.getNextSymbol();
         while (lastSymbol->tokenType != TokenType::end) {
             switch (lastSymbol->tokenType) {
@@ -73,13 +73,13 @@ namespace calculator {
                     break;
                 case TokenType::function:
                     operatorStack.push(lastSymbol);
-                    if (lastSymbol->token.function.type != Function::Type::negation) {
-                        argumentCounters.push(&lastSymbol->token.function.argc);
+                    if (lastSymbol->token->function->type != Function::Type::negation) {
+                        argumentCounters.push(&lastSymbol->token->function->argc);
                         moveNegationsFromTopOfStackToOutput(operatorStack);
                     }
                     break;
                 case TokenType::bracket:
-                    if (lastSymbol->token.bracket.type == Bracket::Type::left) {
+                    if (lastSymbol->token->bracket->type == Bracket::Type::left) {
                         operatorStack.push(lastSymbol);
                     } else {
                         handleRightBracket(operatorStack, argumentCounters);

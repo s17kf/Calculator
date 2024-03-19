@@ -19,6 +19,7 @@ namespace calculator {
             case Type::division:
                 return "/";
         }
+        throw std::invalid_argument("Invalid type in operation->str() conversion");
     }
 
     int Operation::operator()(int a, int b) const {
@@ -34,6 +35,7 @@ namespace calculator {
                     throw std::overflow_error("Divide by zero!");
                 return b / a;
         }
+        throw std::invalid_argument("Invalid type in operation->()");
     }
 
     const char *Function::str() const {
@@ -51,16 +53,17 @@ namespace calculator {
             case Type::min: {
                 char *result = new char[10];
                 sprintf(result, "MIN");
-                sprintf(&result[3], "%d", argc);
+                sprintf(&result[3], "%u", argc);
                 return result;
             }
             case Type::max: {
                 char *result = new char[10];
                 sprintf(result, "MAX");
-                sprintf(&result[3], "%d", argc);
+                sprintf(&result[3], "%u", argc);
                 return result;
             }
         }
+        throw std::invalid_argument("Invalid type in function->str() conversion");
     }
 
     int Function::operator()(data_structures::List<int> &args) const {
@@ -96,6 +99,7 @@ namespace calculator {
                 return currentMax;
             }
         }
+        throw std::invalid_argument("Invalid type in function->()");
     }
 
     std::ostream &operator<<(std::ostream &stream, const Bracket &bracket) {
@@ -106,25 +110,25 @@ namespace calculator {
     std::ostream &operator<<(std::ostream &stream, const Symbol &symbol) {
         switch (symbol.tokenType) {
             case TokenType::number:
-                stream << symbol.token.number;
+                stream << symbol.token->number;
                 break;
             case TokenType::operation:
-                stream << symbol.token.operation.str();
+                stream << symbol.token->operation->str();
                 break;
             case TokenType::function: {
-                const char *functionStr = symbol.token.function.str();
+                const char *functionStr = symbol.token->function->str();
                 stream << functionStr;
                 delete[] functionStr;
                 break;
             }
             case TokenType::bracket:
-                stream << symbol.token.bracket;
+                stream << *symbol.token->bracket;
                 break;
             case TokenType::comma:
                 stream << ',';
                 break;
             case TokenType::end:
-                stream << symbol.token.end;
+                stream << symbol.token->end;
                 break;
             default:
                 throw std::invalid_argument("Invalid symbol in stream opertator!");
@@ -137,17 +141,18 @@ namespace calculator {
             return false;
         switch (s1.tokenType) {
             case TokenType::number:
-                return s1.token.number == s2.token.number;
+                return s1.token->number == s2.token->number;
             case TokenType::operation:
-                return s1.token.operation == s2.token.operation;
+                return *s1.token->operation == *s2.token->operation;
             case TokenType::function:
-                return s1.token.function == s2.token.function;
+                return *s1.token->function == *s2.token->function;
             case TokenType::bracket:
-                return s1.token.bracket == s2.token.bracket;
+                return *s1.token->bracket == *s2.token->bracket;
             case TokenType::comma:
             case TokenType::end:
                 return true;
         }
+        throw std::invalid_argument("Invalid type in symbol->== operator");
     }
 
     bool operator<(const Operation &o1, const Operation &o2) {
@@ -168,5 +173,6 @@ namespace calculator {
             case Type::division:
                 return 1;
         }
+        throw std::invalid_argument("Invalid type in operation->prio()");
     }
 }

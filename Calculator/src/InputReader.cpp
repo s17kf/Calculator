@@ -14,55 +14,49 @@ namespace calculator {
         inputStream >> input;
         switch (input[0]) {
             case '.':
-                return new Symbol{.tokenType=TokenType::end};
+                return new Symbol(TokenType::end, new Token('.'));
             case ',':
-                return new Symbol{.tokenType=TokenType::comma};
+                return new Symbol(TokenType::comma, new Token(','));
             case '+':
-                return new Symbol{.tokenType = TokenType::operation,
-                        .token={.operation={.type=Operation::Type::addition}}};
+                return new Symbol(TokenType::operation,
+                                  new Token(new Operation(Operation::Type::addition)));
             case '-':
-                return new Symbol{.tokenType = TokenType::operation,
-                        .token={.operation={.type=Operation::Type::subtraction}}};
+                return new Symbol(TokenType::operation,
+                                  new Token(new Operation(Operation::Type::subtraction)));
             case '*':
-                return new Symbol{.tokenType = TokenType::operation,
-                        .token={.operation={.type=Operation::Type::multiplying}}};
+                return new Symbol(TokenType::operation,
+                                  new Token(new Operation(Operation::Type::multiplying)));
             case '/':
-                return new Symbol{.tokenType = TokenType::operation,
-                        .token={.operation={.type=Operation::Type::division}}};
+                return new Symbol(TokenType::operation,
+                                  new Token(new Operation(Operation::Type::division)));
             case '(':
-                return new Symbol{.tokenType = TokenType::bracket,
-                        .token = {.bracket={.type=Bracket::Type::left}}};
+                return new Symbol(TokenType::bracket,
+                                  new Token(new Bracket(Bracket::Type::left)));
             case ')':
-                return new Symbol{.tokenType = TokenType::bracket,
-                        .token = {.bracket={.type=Bracket::Type::right}}};
+                return new Symbol(TokenType::bracket,
+                                  new Token(new Bracket(Bracket::Type::right)));
             case 'N':
                 if (strcmp(input, "N") == 0)
-                    return new Symbol{.tokenType = TokenType::function,
-                            .token = {.function={.type=Function::Type::negation,
-                                    .argc=1}}};
-                break;
+                    return new Symbol(TokenType::function,
+                                      new Token(new Function(Function::Type::negation)));
             case 'I':
                 if (strcmp(input, "IF") == 0)
-                    return new Symbol{.tokenType = TokenType::function,
-                            .token = {.function={.type=Function::Type::condition,
-                                    .argc=1}}};
-                break;
+                    return new Symbol(TokenType::function,
+                                      new Token(new Function(Function::Type::condition)));
             case 'M':
                 if (strcmp(input, "MIN") == 0)
-                    return new Symbol{.tokenType = TokenType::function,
-                            .token = {.function={.type=Function::Type::min,
-                                    .argc=1}}};
+                    return new Symbol(TokenType::function,
+                                      new Token(new Function(Function::Type::min)));
                 else if (strcmp(input, "MAX") == 0)
-                    return new Symbol{.tokenType = TokenType::function,
-                            .token = {.function={.type=Function::Type::max,
-                                    .argc=1}}};
-                break;
-            default:
-                return new Symbol{.tokenType = TokenType::number,
-                        .token = {.number=std::stoi(input)}};
+                    return new Symbol(TokenType::function,
+                                      new Token(new Function(Function::Type::max)));
+            default: {
+                int number;
+                sscanf(input, "%d",&number);
+                return new Symbol(TokenType::number,
+                                  new Token(number));
+            }
         }
-        throw std::invalid_argument(std::string("Invalid symbol: ") + input);
-
     }
 
 } // calculator

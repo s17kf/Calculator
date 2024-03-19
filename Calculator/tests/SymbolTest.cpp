@@ -14,6 +14,7 @@ using calculator::TokenType;
 using calculator::Operation;
 using calculator::Function;
 using calculator::Bracket;
+using calculator::Token;
 
 using data_structures::List;
 
@@ -28,59 +29,67 @@ protected:
 };
 
 TEST_F(SymbolTest, SymbolStrTest) {
-    Symbol number{.tokenType = TokenType::number, .token = {.number=1234}};
+    auto *numberToken = new Token(1234);
+    Symbol number(TokenType::number, numberToken);
     verifyStreamResult(number, "1234");
 
-    Symbol plus{.tokenType=calculator::TokenType::operation,
-            .token={.operation={.type=Operation::Type::addition}}};
-    Symbol minus{.tokenType=calculator::TokenType::operation,
-            .token={.operation={.type=Operation::Type::subtraction}}};
-    Symbol multiply{.tokenType=calculator::TokenType::operation,
-            .token={.operation={.type=Operation::Type::multiplying}}};
-    Symbol divide{.tokenType=calculator::TokenType::operation,
-            .token={.operation={.type=Operation::Type::division}}};
+    auto *plusOperation = new Operation(Operation::Type::addition);
+    auto *plusToken = new Token(plusOperation);
+    auto *minusOperation = new Operation(Operation::Type::subtraction);
+    auto *minusToken = new Token(minusOperation);
+    auto *multiplyOperation = new Operation(Operation::Type::multiplying);
+    auto *multiplyToken = new Token(multiplyOperation);
+    auto *divideOperation = new Operation(Operation::Type::division);
+    auto *divideToken = new Token(divideOperation);
+    Symbol plus(calculator::TokenType::operation, plusToken);
+    Symbol minus(calculator::TokenType::operation, minusToken);
+    Symbol multiply(calculator::TokenType::operation, multiplyToken);
+    Symbol divide(calculator::TokenType::operation, divideToken);
     verifyStreamResult(plus, "+");
     verifyStreamResult(minus, "-");
     verifyStreamResult(multiply, "*");
     verifyStreamResult(divide, "/");
 
-
-    Symbol condition{.tokenType=calculator::TokenType::function,
-            .token={.function={.type=Function::Type::condition,
-                    .argc=0}}};
-    Symbol negation{.tokenType=calculator::TokenType::function,
-            .token={.function={.type=Function::Type::negation}}};
-    Symbol min{.tokenType=calculator::TokenType::function,
-            .token={.function={.type=Function::Type::min,
-                    .argc=0}}};
-    Symbol max{.tokenType=calculator::TokenType::function,
-            .token={.function={.type=Function::Type::max,
-                    .argc=0}}};
+    auto *condFunction = new Function(Function::Type::condition, 0);
+    auto *condToken = new Token(condFunction);
+    auto *negationFunction = new Function(Function::Type::negation, 0);
+    auto *negationToken = new Token(negationFunction);
+    auto *minFunction = new Function(Function::Type::min, 0);
+    auto *minToken = new Token(minFunction);
+    auto *maxFunction = new Function(Function::Type::max, 0);
+    auto *maxToken = new Token(maxFunction);
+    Symbol condition(calculator::TokenType::function, condToken);
+    Symbol negation(calculator::TokenType::function, negationToken);
+    Symbol min(calculator::TokenType::function, minToken);
+    Symbol max(calculator::TokenType::function, maxToken);
     verifyStreamResult(condition, "IF");
     verifyStreamResult(negation, "N");
     verifyStreamResult(min, "MIN0");
     verifyStreamResult(max, "MAX0");
 
-
-    Symbol bracketLeft{.tokenType = TokenType::bracket,
-            .token = {.bracket={.type=Bracket::Type::left}}};
-    Symbol bracketRight{.tokenType = TokenType::bracket,
-            .token = {.bracket={.type=Bracket::Type::right}}};
+    auto *leftBracket = new Bracket(Bracket::Type::left);
+    auto *leftToken = new Token(leftBracket);
+    auto *rightBracket = new Bracket(Bracket::Type::right);
+    auto rightToken = new Token(rightBracket);
+    Symbol bracketLeft(TokenType::bracket, leftToken);
+    Symbol bracketRight(TokenType::bracket, rightToken);
     verifyStreamResult(bracketLeft, "(");
     verifyStreamResult(bracketRight, ")");
 
 
-    Symbol comma{.tokenType = TokenType::comma, .token = {.comma=','}};
-    Symbol dot{.tokenType = TokenType::end, .token = {.end='.'}};
+    auto *commaToken = new Token(',');
+    auto *dotToken = new Token('.');
+    Symbol comma(TokenType::comma, commaToken);
+    Symbol dot(TokenType::end, dotToken);
     verifyStreamResult(comma, ",");
     verifyStreamResult(dot, ".");
 }
 
 TEST_F(SymbolTest, operationsGiveProperResults) {
-    const auto plus = Operation{.type=Operation::Type::addition};
-    const auto minus = Operation{.type=Operation::Type::subtraction};
-    const auto multiply = Operation{.type=Operation::Type::multiplying};
-    const auto divide = Operation{.type=Operation::Type::division};
+    const auto plus = Operation(Operation::Type::addition);
+    const auto minus = Operation(Operation::Type::subtraction);
+    const auto multiply = Operation(Operation::Type::multiplying);
+    const auto divide = Operation(Operation::Type::division);
 
     ASSERT_EQ(11, plus(5, 6));
     ASSERT_EQ(-1, minus(3, 2));
@@ -90,8 +99,7 @@ TEST_F(SymbolTest, operationsGiveProperResults) {
 }
 
 TEST_F(SymbolTest, conditionGiveProperResults) {
-    const auto cond = Function{.type=Function::Type::condition,
-            .argc=3};
+    const auto cond = Function(Function::Type::condition, 3);
 
     List<int> list1;
     list1.pushBack(6);
@@ -107,8 +115,7 @@ TEST_F(SymbolTest, conditionGiveProperResults) {
 }
 
 TEST_F(SymbolTest, negationGiveProperResults) {
-    const auto negation = Function{.type=Function::Type::negation,
-            .argc=1};
+    const auto negation = Function(Function::Type::negation, 1);
 
     List<int> list1;
     list1.pushBack(6);
@@ -120,8 +127,7 @@ TEST_F(SymbolTest, negationGiveProperResults) {
 }
 
 TEST_F(SymbolTest, maxGiveProperResults) {
-    const auto max = Function{.type=Function::Type::max,
-            .argc=4};
+    const auto max = Function(Function::Type::max, 4);
 
     List<int> list1;
     list1.pushBack(4);
@@ -132,8 +138,7 @@ TEST_F(SymbolTest, maxGiveProperResults) {
 }
 
 TEST_F(SymbolTest, minGiveProperResults) {
-    const auto min = Function{.type=Function::Type::min,
-            .argc=5};
+    const auto min = Function(Function::Type::min, 5);
 
     List<int> list1;
     list1.pushBack(4);
