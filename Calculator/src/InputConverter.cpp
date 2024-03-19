@@ -49,7 +49,7 @@ namespace calculator {
     }
 
 
-    void InputConverter::moveNegationsFromTopOfStackToOutput(data_structures::Stack<Symbol *> &operatorStack) {
+    void InputConverter::moveNegationsFromTopOfStackToOutput(Stack<Symbol *> &operatorStack) {
         while (!operatorStack.empty() &&
                operatorStack.top()->tokenType == TokenType::function &&
                operatorStack.top()->token->function->type == Function::Type::negation) {
@@ -75,7 +75,6 @@ namespace calculator {
                     operatorStack.push(lastSymbol);
                     if (lastSymbol->token->function->type != Function::Type::negation) {
                         argumentCounters.push(&lastSymbol->token->function->argc);
-                        moveNegationsFromTopOfStackToOutput(operatorStack);
                     }
                     break;
                 case TokenType::bracket:
@@ -83,6 +82,7 @@ namespace calculator {
                         operatorStack.push(lastSymbol);
                     } else {
                         handleRightBracket(operatorStack, argumentCounters);
+                        moveNegationsFromTopOfStackToOutput(operatorStack);
                         delete lastSymbol;
                     };
                     break;

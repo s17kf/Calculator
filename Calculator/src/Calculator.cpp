@@ -36,7 +36,8 @@ namespace calculator {
                         while (inputConverter.symbolsLeft()){
                             delete inputConverter.removeNextSymbol();
                         }
-                        throw;
+//                        throw std::overflow_error(e.what());
+                        return INT_MAX;
                     }
                     delete symbol;
                     break;
@@ -72,8 +73,12 @@ namespace calculator {
         for (unsigned int i = 0; i < n; ++i) {
             try {
                 int result = calculator.calculate();
+                if (result == INT_MAX) {
+                    ostream << "ERROR" << std::endl;
+                    continue;
+                }
                 ostream << result << std::endl;
-            } catch (std::overflow_error &e) {
+            } catch ([[maybe_unused]] std::runtime_error &e) {
                 ostream << "ERROR" << std::endl;
             }
         }

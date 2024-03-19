@@ -24,7 +24,7 @@ namespace calculator {
             addition, subtraction, multiplying, division,
         };
 
-        Operation(Operation::Type type) : type(type) {}
+        explicit Operation(Operation::Type type) : type(type) {}
 
         [[nodiscard]] const char *str() const;
 
@@ -63,7 +63,7 @@ namespace calculator {
             left, right,
         };
 
-        Bracket(Bracket::Type type) : type(type) {}
+        explicit Bracket(Bracket::Type type) : type(type) {}
 
         [[nodiscard]] const char *str() const {
             switch (type) {
