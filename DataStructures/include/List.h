@@ -42,8 +42,6 @@ namespace data_structures {
 
             bool operator==(const Iterator &other) const { return node == other.node; }
 
-            bool operator!=(const Iterator &other) const { return !(*this == other); }
-
             explicit Iterator(Node *node) : node(node) {}
 
         protected:
@@ -74,8 +72,6 @@ namespace data_structures {
             }
 
             bool operator==(const ReverseIterator &other) const { return node == other.node; }
-
-            bool operator!=(const ReverseIterator &other) const { return !(*this == other); }
 
             explicit ReverseIterator(Node *node) : node(node) {}
 
@@ -108,9 +104,9 @@ namespace data_structures {
 
         ReverseIterator rend() const { return ReverseIterator(beforeFirst); }
 
-        const size_t &size() const { return mSize; }
+        [[nodiscard]] const size_t &size() const { return mSize; }
 
-        bool empty() const { return mSize == 0; }
+        [[nodiscard]] bool empty() const { return mSize == 0; }
 
         void pushBack(const T &data) {
             Node *newNode = new Node{

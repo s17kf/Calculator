@@ -4,7 +4,6 @@
 
 #include "InputConverter.h"
 
-
 using data_structures::Stack;
 
 namespace calculator {

@@ -30,7 +30,7 @@ namespace calculator {
 
         Symbol *removeNextSymbol();
 
-        bool symbolsLeft() const { return !outputQueue.empty(); }
+        [[nodiscard]] bool symbolsLeft() const { return !outputQueue.empty(); }
 
         inline void printOutputQueue(std::ostream &ostream) {
             auto it = outputQueue.begin();

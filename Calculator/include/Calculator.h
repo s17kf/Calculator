@@ -5,7 +5,7 @@
 #ifndef CALCULATORAADS_CALCULATOR_H
 #define CALCULATORAADS_CALCULATOR_H
 
-#include <ostream>
+#include <iostream>
 
 #include "InputReader.h"
 #include "Queue.h"

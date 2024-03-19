@@ -5,7 +5,7 @@
 #ifndef CALCULATORAADS_INPUTREADER_H
 #define CALCULATORAADS_INPUTREADER_H
 
-#include <iostream>
+#include <istream>
 
 
 namespace calculator {
