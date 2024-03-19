@@ -47,7 +47,7 @@ namespace calculator {
         void handleOperation(data_structures::Stack<Symbol *> &operatorStack, Symbol *lastSymbol);
 
         void handleRightBracket(data_structures::Stack<Symbol *> &operatorStack,
-                                data_structures::Stack<uint *> &argumentCounters);
+                                data_structures::Stack<unsigned int *> &argumentCounters);
 
         void moveNegationsFromTopOfStackToOutput(data_structures::Stack<Symbol *> &operatorStack);
 

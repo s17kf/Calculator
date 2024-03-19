@@ -27,7 +27,7 @@ namespace calculator {
         operatorStack.push(lastSymbol);
     }
 
-    void InputConverter::handleRightBracket(Stack<Symbol *> &operatorStack, Stack<uint *> &argumentCounters) {
+    void InputConverter::handleRightBracket(Stack<Symbol *> &operatorStack, Stack<unsigned int *> &argumentCounters) {
         Symbol *topSymbol = operatorStack.top();
         while (topSymbol->tokenType != TokenType::bracket) {
             // don't need to check bracket direction because only left brackets are added to operatorStack

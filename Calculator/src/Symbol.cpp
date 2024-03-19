@@ -159,7 +159,7 @@ namespace calculator {
         return o1.prio() <= o2.prio();
     }
 
-    uint Operation::prio() const {
+    unsigned int Operation::prio() const {
         switch (type) {
             case Type::addition:
             case Type::subtraction:

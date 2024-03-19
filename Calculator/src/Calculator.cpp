@@ -16,7 +16,6 @@ namespace calculator {
         Stack<int> stack;
         inputConverter.convertFormula();
         inputConverter.printOutputQueue(ostream);
-        uint loopCounter = 0;
         while (inputConverter.symbolsLeft()) {
             Symbol *symbol = inputConverter.removeNextSymbol();
             switch (symbol->tokenType) {
@@ -44,7 +43,7 @@ namespace calculator {
                 }
                 case TokenType::function: {
                     printCurrentOperation(stack, symbol);
-                    uint argc = symbol->token.function.argc;
+                    unsigned int argc = symbol->token.function.argc;
                     List<int> args;
                     while (argc--) {
                         args.pushBack(stack.top());
@@ -59,19 +58,18 @@ namespace calculator {
                 case TokenType::end:
                     throw std::invalid_argument("Invalid argument during calculation");
             }
-            ++loopCounter;
         }
         return stack.top();
     }
 
     void Calculator::handleUser(std::istream &istream, std::ostream &ostream) {
-        uint n;
+        unsigned int n;
         istream >> n;
 
         auto inputReader = InputReader(istream);
         auto calculator = Calculator(inputReader, ostream);
 
-        for (uint i = 0; i < n; ++i) {
+        for (unsigned int i = 0; i < n; ++i) {
             try {
                 int result = calculator.calculate();
                 std::cout << result << std::endl;

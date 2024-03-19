@@ -11,6 +11,9 @@ namespace data_structures {
     template<typename T>
     class List {
         struct Node {
+            Node(T data = T(), Node *prev = nullptr, Node *next = nullptr) :
+                    data(data), prev(prev), next(next) {}
+
             T data;
             Node *prev;
             Node *next;
@@ -42,6 +45,8 @@ namespace data_structures {
 
             bool operator==(const Iterator &other) const { return node == other.node; }
 
+            bool operator!=(const Iterator &other) const { return !(*this == other); }
+
             explicit Iterator(Node *node) : node(node) {}
 
         protected:
@@ -72,6 +77,8 @@ namespace data_structures {
             }
 
             bool operator==(const ReverseIterator &other) const { return node == other.node; }
+
+            bool operator!=(const ReverseIterator &other) const { return !(*this == other); }
 
             explicit ReverseIterator(Node *node) : node(node) {}
 
@@ -109,22 +116,14 @@ namespace data_structures {
         [[nodiscard]] bool empty() const { return mSize == 0; }
 
         void pushBack(const T &data) {
-            Node *newNode = new Node{
-                    .data = data,
-                    .prev = afterLast->prev,
-                    .next = afterLast
-            };
+            Node *newNode = new Node(data, afterLast->prev, afterLast);
             afterLast->prev->next = newNode;
             afterLast->prev = newNode;
             ++mSize;
         }
 
         void pushFront(const T &data) {
-            Node *newNode = new Node{
-                    .data = data,
-                    .prev = beforeFirst,
-                    .next = beforeFirst->next
-            };
+            Node *newNode = new Node(data, beforeFirst, beforeFirst->next);
             beforeFirst->next->prev = newNode;
             beforeFirst->next = newNode;
             ++mSize;

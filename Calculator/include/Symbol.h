@@ -33,7 +33,7 @@ namespace calculator {
             return type == other.type;
         }
 
-        uint prio() const;
+        unsigned int prio() const;
     };
 
     struct Function {
@@ -42,7 +42,7 @@ namespace calculator {
         };
 
         Type type;
-        uint argc;
+        unsigned int argc;
 
         [[nodiscard]] const char *str() const;
 
