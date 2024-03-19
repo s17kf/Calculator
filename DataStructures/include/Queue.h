@@ -28,6 +28,10 @@ namespace data_structures {
 
         bool empty() const { return data.empty(); }
 
+        auto begin() { return data.begin(); }
+
+        auto end() { return data.end(); }
+
     private:
         List<T> data;
     };

@@ -5,6 +5,8 @@
 #ifndef LIST_H
 #define LIST_H
 
+#include <iterator>
+
 namespace data_structures {
     template<typename T>
     class List {
@@ -17,52 +19,70 @@ namespace data_structures {
     public:
         class Iterator {
         public:
+            using iterator_category = std::forward_iterator_tag;
+            using difference_type = std::ptrdiff_t;
+            using value_type = T;
+            using pointer = value_type *;
+            using reference = value_type &;
+
+            reference operator*() const { return node->data; }
+
+            pointer operator->() { return &node->data; }
+
             Iterator &operator++() {
                 node = node->next;
                 return *this;
             }
 
-            Iterator &operator++(int) {
-                Node *tmp = node;
+            Iterator operator++(int) {
+                Iterator tmp = *this;
                 node = node->next;
-                return *tmp;
+                return tmp;
             }
 
-            bool operator==(const Iterator &other) const {
-                return node == other.node;
-            }
+            bool operator==(const Iterator &other) const { return node == other.node; }
 
-            bool operator!=(const Iterator &other) const {
-                return !(*this == other);
-            }
+            bool operator!=(const Iterator &other) const { return !(*this == other); }
 
-            T &operator*() const {
-                return node->data;
-            }
-
-            explicit Iterator(Node *node) : node(node) {
-            }
+            explicit Iterator(Node *node) : node(node) {}
 
         protected:
             Node *node;
         };
 
-        class ReverseIterator : public Iterator {
+        class ReverseIterator {
         public:
+            using iterator_category = std::forward_iterator_tag;
+            using difference_type = std::ptrdiff_t;
+            using value_type = T;
+            using pointer = value_type *;
+            using reference = value_type &;
+
+            reference operator*() const { return node->data; }
+
+            pointer operator->() { return &node->data; }
+
             ReverseIterator &operator++() {
-                this->node = this->node->prev;
+                node = node->prev;
                 return *this;
             }
 
-            ReverseIterator &operator++(int) {
-                Node *tmp = this->node;
-                this->node = this->node->prev;
-                return *tmp;
+            ReverseIterator operator++(int) {
+                ReverseIterator tmp = *this;
+                node = node->prev;
+                return tmp;
             }
 
-            explicit ReverseIterator(Node *node) : Iterator(node) {
-            }
+            bool operator==(const ReverseIterator &other) const { return node == other.node; }
+
+            bool operator!=(const ReverseIterator &other) const { return !(*this == other); }
+
+            explicit ReverseIterator(Node *node) : node(node) {}
+
+        protected:
+            Node *node;
         };
+
 
         List() : mSize(0) {
             beforeFirst = new Node();
@@ -80,13 +100,13 @@ namespace data_structures {
             }
         }
 
-        Iterator begin() { return ++Iterator(beforeFirst); }
+        Iterator begin() const { return ++Iterator(beforeFirst); }
 
-        Iterator end() { return Iterator(afterLast); }
+        Iterator end() const { return Iterator(afterLast); }
 
-        ReverseIterator rbegin() { return ++ReverseIterator(afterLast); }
+        ReverseIterator rbegin() const { return ++ReverseIterator(afterLast); }
 
-        ReverseIterator rend() { return ReverseIterator(beforeFirst); }
+        ReverseIterator rend() const { return ReverseIterator(beforeFirst); }
 
         const size_t &size() const { return mSize; }
 
@@ -130,7 +150,7 @@ namespace data_structures {
 
         void popFront() {
             if (mSize == 0) {
-                throw std::out_of_range("Try to remove (last) element from empty list!");
+                throw std::out_of_range("Try to remove (first) element from empty list!");
             }
             Node *firstNode = beforeFirst->next;
             beforeFirst->next = firstNode->next;

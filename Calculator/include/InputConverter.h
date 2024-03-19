@@ -10,9 +10,8 @@
 #include "Stack.h"
 #include "Symbol.h"
 
-#include "QueueVector.h"
-#include "StackVector.h"
-
+//#include "QueueVector.h"
+//#include "StackVector.h"
 
 namespace calculator {
 
@@ -24,7 +23,16 @@ namespace calculator {
 
         Symbol *removeNextSymbol();
 
-        bool symbolsLeft() { return !outputQueue.empty(); }
+        bool symbolsLeft() const { return !outputQueue.empty(); }
+
+        inline void printOutputQueue(std::ostream &ostream) {
+            auto it = outputQueue.begin();
+            ostream << *(*it++);
+            for (; it != outputQueue.end(); ++it) {
+                ostream << "  " << *(*it);
+            }
+            ostream << std::endl;
+        }
 
     private:
         void handleComma(data_structures::Stack<Symbol *> &operatorStack);

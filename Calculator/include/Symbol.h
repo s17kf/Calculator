@@ -5,6 +5,8 @@
 #ifndef CALCULATORAADS_SYMBOL_H
 #define CALCULATORAADS_SYMBOL_H
 
+#include "List.h"
+
 namespace calculator {
 
     enum class TokenType {
@@ -23,22 +25,15 @@ namespace calculator {
 
         Type type;
 
-        [[nodiscard]] const char *str() const {
-            switch (type) {
-                case Type::addition:
-                    return "+";
-                case Type::subtraction:
-                    return "-";
-                case Type::multiplying:
-                    return "*";
-                case Type::division:
-                    return "/";
-            }
-        }
+        [[nodiscard]] const char *str() const;
+
+        int operator()(int a, int b) const;
 
         bool operator==(const Operation &other) const {
             return type == other.type;
         }
+
+        uint prio() const;
     };
 
     struct Function {
@@ -49,33 +44,9 @@ namespace calculator {
         Type type;
         uint argc;
 
-        [[nodiscard]] const char *str() const {
-            switch (type) {
-                case Type::condition: {
-                    char *result = new char[4];
-                    sprintf(result, "IF");
-                    sprintf(&result[2], "%d", argc);
-                    return result;
-                }
-                case Type::negation: {
-                    char *result = new char[2];
-                    sprintf(result, "N");
-                    return result;
-                }
-                case Type::min: {
-                    char *result = new char[10];
-                    sprintf(result, "MIN");
-                    sprintf(&result[3], "%d", argc);
-                    return result;
-                }
-                case Type::max: {
-                    char *result = new char[10];
-                    sprintf(result, "MAX");
-                    sprintf(&result[3], "%d", argc);
-                    return result;
-                }
-            }
-        }
+        [[nodiscard]] const char *str() const;
+
+        int operator()(data_structures::List<int> &args) const;
 
         bool operator==(const Function &other) const {
             return type == other.type && argc == other.argc;

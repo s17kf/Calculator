@@ -9,7 +9,7 @@
 
 
 namespace calculator {
-    class Symbol;
+    struct Symbol;
 
     class InputReader {
     public:

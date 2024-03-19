@@ -43,7 +43,8 @@ namespace calculator {
             if (topSymbol->tokenType == TokenType::function) {
                 outputQueue.push(topSymbol);
                 operatorStack.pop();
-                argumentCounters.pop();
+                if (topSymbol->token.function.type != Function::Type::negation)
+                    argumentCounters.pop();
             }
         }
     }

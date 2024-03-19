@@ -7,6 +7,97 @@
 #include "Symbol.h"
 
 namespace calculator {
+
+    const char *Operation::str() const {
+        switch (type) {
+            case Type::addition:
+                return "+";
+            case Type::subtraction:
+                return "-";
+            case Type::multiplying:
+                return "*";
+            case Type::division:
+                return "/";
+        }
+    }
+
+    int Operation::operator()(int a, int b) const {
+        switch (type) {
+            case Type::addition:
+                return a + b;
+            case Type::subtraction:
+                return b - a;
+            case Type::multiplying:
+                return a * b;
+            case Type::division:
+                if (a == 0)
+                    throw std::overflow_error("Divide by zero!");
+                return b / a;
+        }
+    }
+
+    const char *Function::str() const {
+        switch (type) {
+            case Type::condition: {
+                char *result = new char[3];
+                sprintf(result, "IF");
+                return result;
+            }
+            case Type::negation: {
+                char *result = new char[2];
+                sprintf(result, "N");
+                return result;
+            }
+            case Type::min: {
+                char *result = new char[10];
+                sprintf(result, "MIN");
+                sprintf(&result[3], "%d", argc);
+                return result;
+            }
+            case Type::max: {
+                char *result = new char[10];
+                sprintf(result, "MAX");
+                sprintf(&result[3], "%d", argc);
+                return result;
+            }
+        }
+    }
+
+    int Function::operator()(data_structures::List<int> &args) const {
+        if (args.size() != argc)
+            throw std::out_of_range("Bad number of function args");
+
+        switch (type) {
+            case Type::condition: {
+                int cond = args.back();
+                args.popBack();
+                return cond > 0 ? args.back() : args.front();
+            }
+            case Type::negation:
+                return -args.front();
+            case Type::min: {
+                int currentMin = args.front();
+                args.popFront();
+                while (!args.empty()) {
+                    if (args.front() < currentMin)
+                        currentMin = args.front();
+                    args.popFront();
+                }
+                return currentMin;
+            }
+            case Type::max: {
+                int currentMax = args.front();
+                args.popFront();
+                while (!args.empty()) {
+                    if (args.front() > currentMax)
+                        currentMax = args.front();
+                    args.popFront();
+                }
+                return currentMax;
+            }
+        }
+    }
+
     std::ostream &operator<<(std::ostream &stream, const Bracket &bracket) {
         stream << bracket.str();
         return stream;
@@ -60,20 +151,22 @@ namespace calculator {
     }
 
     bool operator<(const Operation &o1, const Operation &o2) {
-        switch (o1.type) {
-            case Operation::Type::addition:
-            case Operation::Type::subtraction:
-                if (o2.type == Operation::Type::addition || o2.type == Operation::Type::subtraction)
-                    return false;
-                return true;
-            case Operation::Type::multiplying:
-            case Operation::Type::division:
-                return false;
-        }
+        return o1.prio() < o2.prio();
     }
 
 
     bool operator<=(const Operation &o1, const Operation &o2) {
-        return o1 < o2 || o1 == o2;
+        return o1.prio() <= o2.prio();
+    }
+
+    uint Operation::prio() const {
+        switch (type) {
+            case Type::addition:
+            case Type::subtraction:
+                return 0;
+            case Type::multiplying:
+            case Type::division:
+                return 1;
+        }
     }
 }

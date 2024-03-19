@@ -20,10 +20,12 @@ set(CALCULATOR_TEST_SOURCES
         tests_main.cpp
         Calculator/tests/SymbolTest.cpp
         Calculator/tests/InputReaderTest.cpp
+        Calculator/tests/InputConverterTest.cpp
+        Calculator/tests/CalculatorTest.cpp
         Calculator/src/Symbol.cpp
         Calculator/src/InputReader.cpp
         Calculator/src/InputConverter.cpp
-        Calculator/tests/InputConverterTest.cpp
+        Calculator/src/Calculator.cpp
 )
 
 add_executable(CalculatorAads main.cpp
