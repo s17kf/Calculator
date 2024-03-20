@@ -11,7 +11,7 @@ namespace data_structures {
     template<typename T>
     class List {
         struct Node {
-            Node(T data = T(), Node *prev = nullptr, Node *next = nullptr) :
+            explicit Node(T data = T(), Node *prev = nullptr, Node *next = nullptr) :
                     data(data), prev(prev), next(next) {}
 
             T data;
@@ -87,12 +87,18 @@ namespace data_structures {
         };
 
 
-        List() : mSize(0) {
-            beforeFirst = new Node();
-            afterLast = new Node();
-            beforeFirst->next = afterLast;
-            afterLast->prev = beforeFirst;
+        explicit List() : mSize(0) {
+            setUpEmptyListNodes();
         }
+
+        List(const List<T> &other) : mSize(other.mSize) {
+            setUpEmptyListNodes();
+            for (auto &item: other) {
+                pushBack(item);
+            }
+        }
+
+        List<T> &operator=(const List<T> &other) = delete;
 
         ~List() {
             Node *node = beforeFirst;
@@ -166,6 +172,13 @@ namespace data_structures {
         }
 
     private:
+        void setUpEmptyListNodes() {
+            beforeFirst = new Node();
+            afterLast = new Node();
+            beforeFirst->next = afterLast;
+            afterLast->prev = beforeFirst;
+        }
+
         size_t mSize;
         Node *beforeFirst;
         Node *afterLast;
