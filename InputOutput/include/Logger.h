@@ -17,8 +17,6 @@ namespace input_output {
 
         virtual int log(Logger::Level level, const char *format, ...) = 0;
 
-        virtual void setLogLevel(Level level) = 0;
-
         virtual ~Logger() = default;
     };
 

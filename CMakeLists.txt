@@ -41,6 +41,7 @@ set(MAIN_SOURCES
         Calculator/src/InputReader.cpp
         Calculator/src/Symbol.cpp
         DataStructures/src/String.cpp
+        InputOutput/src/ConsoleLogger.cpp
 )
 
 add_executable(CalculatorAads ${MAIN_SOURCES})

@@ -15,7 +15,7 @@ namespace input_output {
     public:
         int log(Logger::Level level, const char *format, ...) override;
 
-        void setLogLevel(Level level) override;
+        void setLogLevel(Level level);
 
         void reset();
 
@@ -26,7 +26,7 @@ namespace input_output {
     private:
         const size_t BUF_SIZE = 200;
         std::stringstream stream;
-        Level logLevel;
+        Level logLevel = Level::low;
     };
 
 } // input_output
