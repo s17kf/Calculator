@@ -14,47 +14,36 @@ namespace calculator {
         inputStream >> input;
         switch (input[0]) {
             case '.':
-                return new Symbol(TokenType::end, new Token('.'));
+                return new Symbol(TokenType::end, '.');
             case ',':
-                return new Symbol(TokenType::comma, new Token(','));
+                return new Symbol(TokenType::comma, ',');
             case '+':
-                return new Symbol(TokenType::operation,
-                                  new Token(new Operation(Operation::Type::addition)));
+                return new Symbol(TokenType::operation, Operation(Operation::Type::addition));
             case '-':
-                return new Symbol(TokenType::operation,
-                                  new Token(new Operation(Operation::Type::subtraction)));
+                return new Symbol(TokenType::operation, Operation(Operation::Type::subtraction));
             case '*':
-                return new Symbol(TokenType::operation,
-                                  new Token(new Operation(Operation::Type::multiplying)));
+                return new Symbol(TokenType::operation, Operation(Operation::Type::multiplying));
             case '/':
-                return new Symbol(TokenType::operation,
-                                  new Token(new Operation(Operation::Type::division)));
+                return new Symbol(TokenType::operation, Operation(Operation::Type::division));
             case '(':
-                return new Symbol(TokenType::bracket,
-                                  new Token(new Bracket(Bracket::Type::left)));
+                return new Symbol(TokenType::bracket, Bracket(Bracket::Type::left));
             case ')':
-                return new Symbol(TokenType::bracket,
-                                  new Token(new Bracket(Bracket::Type::right)));
+                return new Symbol(TokenType::bracket, Bracket(Bracket::Type::right));
             case 'N':
                 if (strcmp(input, "N") == 0)
-                    return new Symbol(TokenType::function,
-                                      new Token(new Function(Function::Type::negation)));
+                    return new Symbol(TokenType::function, Function(Function::Type::negation));
             case 'I':
                 if (strcmp(input, "IF") == 0)
-                    return new Symbol(TokenType::function,
-                                      new Token(new Function(Function::Type::condition)));
+                    return new Symbol(TokenType::function, Function(Function::Type::condition));
             case 'M':
                 if (strcmp(input, "MIN") == 0)
-                    return new Symbol(TokenType::function,
-                                      new Token(new Function(Function::Type::min)));
+                    return new Symbol(TokenType::function, Function(Function::Type::min));
                 else if (strcmp(input, "MAX") == 0)
-                    return new Symbol(TokenType::function,
-                                      new Token(new Function(Function::Type::max)));
+                    return new Symbol(TokenType::function, Function(Function::Type::max));
             default: {
                 int number;
-                sscanf(input, "%d",&number);
-                return new Symbol(TokenType::number,
-                                  new Token(number));
+                sscanf(input, "%d", &number);
+                return new Symbol(TokenType::number, number);
             }
         }
     }

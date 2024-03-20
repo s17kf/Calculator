@@ -6,7 +6,6 @@
 #define CALCULATORAADS_SYMBOL_H
 
 #include "List.h"
-#include <memory>
 
 namespace calculator {
 
@@ -34,7 +33,7 @@ namespace calculator {
             return type == other.type;
         }
 
-        unsigned int prio() const;
+        [[nodiscard]] unsigned int prio() const;
 
         Type type;
     };
@@ -44,7 +43,7 @@ namespace calculator {
             condition, negation, min, max,
         };
 
-        Function(Function::Type type, unsigned int argc = 1) : type(type), argc(argc) {}
+        explicit Function(Function::Type type, unsigned int argc = 1) : type(type), argc(argc) {}
 
         [[nodiscard]] const char *str() const;
 
@@ -84,15 +83,15 @@ namespace calculator {
 
 
     union Token {
-        Token(int number) : number(number) {}
+        explicit Token(int number) : number(number) {}
 
-        Token(Operation *operation) : operation(operation) {}
+        explicit Token(Operation operation) : operation(operation) {}
 
-        Token(Function *function) : function(function) {}
+        explicit Token(Function function) : function(function) {}
 
-        Token(Bracket *bracket) : bracket(bracket) {}
+        explicit Token(Bracket bracket) : bracket(bracket) {}
 
-        Token(char c) {
+        explicit Token(char c) {
             if (c == ',') {
                 comma = c;
                 return;
@@ -102,35 +101,27 @@ namespace calculator {
 
         ~Token() {}
 
-
         int number;
-        std::unique_ptr<Operation> operation;
-        std::unique_ptr<Function> function;
-        std::unique_ptr<Bracket> bracket;
+        Operation operation;
+        Function function;
+        Bracket bracket;
         char comma;
         char end;
     };
 
     struct Symbol {
-        Symbol(TokenType tokenType, Token *other) : tokenType(tokenType), token(other) {}
+        Symbol(TokenType tokenType, int number) : tokenType(tokenType), token(number) {}
 
-        ~Symbol() {
-            switch (tokenType) {
-                case TokenType::operation:
-                    token->operation.reset();
-                    break;
-                case TokenType::function:
-                    token->function.reset();
-                    break;
-                case TokenType::bracket:
-                    token->bracket.reset();
-                    break;
-            }
-            delete token;
-        }
+        Symbol(TokenType tokenType, Operation operation) : tokenType(tokenType), token(operation) {}
+
+        Symbol(TokenType tokenType, Function function) : tokenType(tokenType), token(function) {}
+
+        Symbol(TokenType tokenType, Bracket bracket) : tokenType(tokenType), token(bracket) {}
+
+        Symbol(TokenType tokenType, char c) : tokenType(tokenType), token(c) {}
 
         TokenType tokenType;
-        Token *token;
+        Token token;
     };
 
     std::ostream &operator<<(std::ostream &stream, const Bracket &bracket);

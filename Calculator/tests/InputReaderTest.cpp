@@ -27,61 +27,58 @@ TEST_F(InputReaderTest, validMultiTypeInputTest) {
     const std::string inputExpression =
             "2 + MIN ( 100 , MAX ( 1 , 6 / 5 + 2 , 2 ) , N 80 ,  IF ( 66  , 35 , 77 ) , 50 , 60 ) * 3 .";
 
-    const std::list<Symbol *> expectedSymbols{
-            new Symbol(TokenType::number, new Token(2)),
-            new Symbol(TokenType::operation, new Token(new Operation(Operation::Type::addition))),
-            new Symbol(TokenType::function, new Token(new Function(Function::Type::min, 1))),
-            new Symbol(TokenType::bracket, new Token(new Bracket(Bracket::Type::left))),
-            new Symbol(TokenType::number, new Token(100)),
-            new Symbol(TokenType::comma, new Token(',')),
-            new Symbol(TokenType::function, new Token(new Function(Function::Type::max, 1))),
-            new Symbol(TokenType::bracket, new Token(new Bracket(Bracket::Type::left))),
-            new Symbol(TokenType::number, new Token(1)),
-            new Symbol(TokenType::comma, new Token(',')),
-            new Symbol(TokenType::number, new Token(6)),
-            new Symbol(TokenType::operation, new Token(new Operation(Operation::Type::division))),
-            new Symbol(TokenType::number, new Token(5)),
-            new Symbol(TokenType::operation, new Token(new Operation(Operation::Type::addition))),
-            new Symbol(TokenType::number, new Token(2)),
-            new Symbol(TokenType::comma, new Token(',')),
-            new Symbol(TokenType::number, new Token(2)),
-            new Symbol(TokenType::bracket, new Token(new Bracket(Bracket::Type::right))),
-            new Symbol(TokenType::comma, new Token(',')),
-            new Symbol(TokenType::function, new Token(new Function(Function::Type::negation, 1))),
-            new Symbol(TokenType::number, new Token(80)),
-            new Symbol(TokenType::comma, new Token(',')),
-            new Symbol(TokenType::function, new Token(new Function(Function::Type::condition, 1))),
-            new Symbol(TokenType::bracket, new Token(new Bracket(Bracket::Type::left))),
-            new Symbol(TokenType::number, new Token(66)),
-            new Symbol(TokenType::comma, new Token(',')),
-            new Symbol(TokenType::number, new Token(35)),
-            new Symbol(TokenType::comma, new Token(',')),
-            new Symbol(TokenType::number, new Token(77)),
-            new Symbol(TokenType::bracket, new Token(new Bracket(Bracket::Type::right))),
-            new Symbol(TokenType::comma, new Token(',')),
-            new Symbol(TokenType::number, new Token(50)),
-            new Symbol(TokenType::comma, new Token(',')),
-            new Symbol(TokenType::number, new Token(60)),
-            new Symbol(TokenType::bracket, new Token(new Bracket(Bracket::Type::right))),
-            new Symbol(TokenType::operation, new Token(new Operation(Operation::Type::multiplying))),
-            new Symbol(TokenType::number, new Token(3)),
+    const std::list<Symbol> expectedSymbols{
+            Symbol(TokenType::number, 2),
+            Symbol(TokenType::operation, Operation(Operation::Type::addition)),
+            Symbol(TokenType::function, Function(Function::Type::min, 1)),
+            Symbol(TokenType::bracket, Bracket(Bracket::Type::left)),
+            Symbol(TokenType::number, 100),
+            Symbol(TokenType::comma, ','),
+            Symbol(TokenType::function, Function(Function::Type::max, 1)),
+            Symbol(TokenType::bracket, Bracket(Bracket::Type::left)),
+            Symbol(TokenType::number, 1),
+            Symbol(TokenType::comma, ','),
+            Symbol(TokenType::number, 6),
+            Symbol(TokenType::operation, Operation(Operation::Type::division)),
+            Symbol(TokenType::number, 5),
+            Symbol(TokenType::operation, Operation(Operation::Type::addition)),
+            Symbol(TokenType::number, 2),
+            Symbol(TokenType::comma, ','),
+            Symbol(TokenType::number, 2),
+            Symbol(TokenType::bracket, Bracket(Bracket::Type::right)),
+            Symbol(TokenType::comma, ','),
+            Symbol(TokenType::function, Function(Function::Type::negation, 1)),
+            Symbol(TokenType::number, 80),
+            Symbol(TokenType::comma, ','),
+            Symbol(TokenType::function, Function(Function::Type::condition, 1)),
+            Symbol(TokenType::bracket, Bracket(Bracket::Type::left)),
+            Symbol(TokenType::number, 66),
+            Symbol(TokenType::comma, ','),
+            Symbol(TokenType::number, 35),
+            Symbol(TokenType::comma, ','),
+            Symbol(TokenType::number, 77),
+            Symbol(TokenType::bracket, Bracket(Bracket::Type::right)),
+            Symbol(TokenType::comma, ','),
+            Symbol(TokenType::number, 50),
+            Symbol(TokenType::comma, ','),
+            Symbol(TokenType::number, 60),
+            Symbol(TokenType::bracket, Bracket(Bracket::Type::right)),
+            Symbol(TokenType::operation, Operation(Operation::Type::multiplying)),
+            Symbol(TokenType::number, 3),
     };
 
     std::stringstream stream(inputExpression);
     InputReader inputReader(stream);
-    std::list<Symbol *> actualSymbols;
+    std::list<Symbol> actualSymbols;
 
     Symbol *lastSymbol;
     lastSymbol = inputReader.getNextSymbol();
-    auto expectedSymbolIt = expectedSymbols.begin();
     while (lastSymbol->tokenType != TokenType::end) {
-        ASSERT_EQ(*(*expectedSymbolIt++), *lastSymbol);
+        actualSymbols.emplace_back(*lastSymbol);
         delete lastSymbol;
         lastSymbol = inputReader.getNextSymbol();
     }
     delete lastSymbol;
 
-    for (auto *symbol : expectedSymbols) {
-        delete symbol;
-    }
+    EXPECT_EQ(expectedSymbols, actualSymbols);
 }

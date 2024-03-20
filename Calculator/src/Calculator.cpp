@@ -20,7 +20,7 @@ namespace calculator {
             Symbol *symbol = inputConverter.removeNextSymbol();
             switch (symbol->tokenType) {
                 case TokenType::number:
-                    stack.push(symbol->token->number);
+                    stack.push(symbol->token.number);
                     delete symbol;
                     break;
                 case TokenType::operation: {
@@ -30,7 +30,7 @@ namespace calculator {
                     int b = stack.top();
                     stack.pop();
                     try {
-                        stack.push((*symbol->token->operation)(a, b));
+                        stack.push(symbol->token.operation(a, b));
                     } catch (std::overflow_error &e) {
                         delete symbol;
                         while (inputConverter.symbolsLeft()) {
@@ -44,13 +44,13 @@ namespace calculator {
                 }
                 case TokenType::function: {
                     printCurrentOperation(stack, symbol);
-                    unsigned int argc = symbol->token->function->argc;
+                    unsigned int argc = symbol->token.function.argc;
                     List<int> args;
                     while (argc--) {
                         args.pushBack(stack.top());
                         stack.pop();
                     }
-                    stack.push((*symbol->token->function)(args));
+                    stack.push((symbol->token.function)(args));
                     delete symbol;
                     break;
                 }

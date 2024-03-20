@@ -29,58 +29,34 @@ protected:
 };
 
 TEST_F(SymbolTest, SymbolStrTest) {
-    auto *numberToken = new Token(1234);
-    Symbol number(TokenType::number, numberToken);
+    Symbol number(TokenType::number, 1234);
     verifyStreamResult(number, "1234");
 
-    auto *plusOperation = new Operation(Operation::Type::addition);
-    auto *plusToken = new Token(plusOperation);
-    auto *minusOperation = new Operation(Operation::Type::subtraction);
-    auto *minusToken = new Token(minusOperation);
-    auto *multiplyOperation = new Operation(Operation::Type::multiplying);
-    auto *multiplyToken = new Token(multiplyOperation);
-    auto *divideOperation = new Operation(Operation::Type::division);
-    auto *divideToken = new Token(divideOperation);
-    Symbol plus(calculator::TokenType::operation, plusToken);
-    Symbol minus(calculator::TokenType::operation, minusToken);
-    Symbol multiply(calculator::TokenType::operation, multiplyToken);
-    Symbol divide(calculator::TokenType::operation, divideToken);
+    Symbol plus(calculator::TokenType::operation, Operation(Operation::Type::addition));
+    Symbol minus(calculator::TokenType::operation, Operation(Operation::Type::subtraction));
+    Symbol multiply(calculator::TokenType::operation, Operation(Operation::Type::multiplying));
+    Symbol divide(calculator::TokenType::operation, Operation(Operation::Type::division));
     verifyStreamResult(plus, "+");
     verifyStreamResult(minus, "-");
     verifyStreamResult(multiply, "*");
     verifyStreamResult(divide, "/");
 
-    auto *condFunction = new Function(Function::Type::condition, 0);
-    auto *condToken = new Token(condFunction);
-    auto *negationFunction = new Function(Function::Type::negation, 0);
-    auto *negationToken = new Token(negationFunction);
-    auto *minFunction = new Function(Function::Type::min, 0);
-    auto *minToken = new Token(minFunction);
-    auto *maxFunction = new Function(Function::Type::max, 0);
-    auto *maxToken = new Token(maxFunction);
-    Symbol condition(calculator::TokenType::function, condToken);
-    Symbol negation(calculator::TokenType::function, negationToken);
-    Symbol min(calculator::TokenType::function, minToken);
-    Symbol max(calculator::TokenType::function, maxToken);
+    Symbol condition(calculator::TokenType::function, Function(Function::Type::condition));
+    Symbol negation(calculator::TokenType::function, Function(Function::Type::negation));
+    Symbol min(calculator::TokenType::function, Function(Function::Type::min, 0));
+    Symbol max(calculator::TokenType::function, Function(Function::Type::max, 0));
     verifyStreamResult(condition, "IF");
     verifyStreamResult(negation, "N");
     verifyStreamResult(min, "MIN0");
     verifyStreamResult(max, "MAX0");
 
-    auto *leftBracket = new Bracket(Bracket::Type::left);
-    auto *leftToken = new Token(leftBracket);
-    auto *rightBracket = new Bracket(Bracket::Type::right);
-    auto rightToken = new Token(rightBracket);
-    Symbol bracketLeft(TokenType::bracket, leftToken);
-    Symbol bracketRight(TokenType::bracket, rightToken);
+    Symbol bracketLeft(TokenType::bracket, Bracket(Bracket::Type::left));
+    Symbol bracketRight(TokenType::bracket, Bracket(Bracket::Type::right));
     verifyStreamResult(bracketLeft, "(");
     verifyStreamResult(bracketRight, ")");
 
-
-    auto *commaToken = new Token(',');
-    auto *dotToken = new Token('.');
-    Symbol comma(TokenType::comma, commaToken);
-    Symbol dot(TokenType::end, dotToken);
+    Symbol comma(TokenType::comma, ',');
+    Symbol dot(TokenType::end, '.');
     verifyStreamResult(comma, ",");
     verifyStreamResult(dot, ".");
 }
