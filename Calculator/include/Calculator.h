@@ -11,6 +11,7 @@
 #include "Queue.h"
 #include "Stack.h"
 #include "InputConverter.h"
+#include "Logger.h"
 
 namespace calculator {
 
@@ -28,25 +29,19 @@ namespace calculator {
 
     class Calculator {
     public:
-        explicit Calculator(InputReader &inputReader, std::ostream &ostream = std::cout) :
-                inputConverter(inputReader),
-                ostream(ostream) {}
+        explicit Calculator(InputReader &inputReader, input_output::Logger &logger) :
+                mInputConverter(inputReader),
+                mLogger(logger) {}
 
         Result calculate();
 
-        static void handleUser(std::istream &istream = std::cin, std::ostream &ostream = std::cout);
+        static void handleUser(std::istream &istream, input_output::Logger &logger);
 
     private:
-        inline void printCurrentOperation(data_structures::Stack<int> &stack, Symbol *operation) {
-            ostream << operation->str().c_str();
-            for (const auto &item: stack) {
-                ostream << " " << item;
-            }
-            ostream << std::endl;
-        }
+        inline void printCurrentOperation(data_structures::Stack<int> &stack, Symbol *operation);
 
-        InputConverter inputConverter;
-        std::ostream &ostream;
+        InputConverter mInputConverter;
+        input_output::Logger &mLogger;
     };
 
 } // calculator

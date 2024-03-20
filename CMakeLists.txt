@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 23)
 include_directories(
         DataStructures/include
         Calculator/include
+        InputOutput/include
         googletest/googletest/include
         googletest/googlemock/include)
 
@@ -30,6 +31,7 @@ set(CALCULATOR_TEST_SOURCES
         Calculator/src/InputConverter.cpp
         Calculator/src/Calculator.cpp
         DataStructures/src/String.cpp
+        InputOutput/src/LoggerStub.cpp
 )
 
 set(MAIN_SOURCES

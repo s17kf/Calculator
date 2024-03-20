@@ -7,27 +7,29 @@
 
 #include "Calculator.h"
 #include "InputReader.h"
+#include "LoggerStub.h"
 
 using calculator::Calculator;
 using calculator::InputReader;
 using calculator::Result;
+using input_output::LoggerStub;
 
 class CalculatorTest : public ::testing::Test {
 protected:
     std::stringstream inputStream;
-    std::stringstream outputStream;
+    LoggerStub loggerStub;
     std::unique_ptr<InputReader> inputReader;
     std::unique_ptr<Calculator> calculator;
 
     void SetUp() override {
         inputReader = std::make_unique<InputReader>(inputStream);
-        calculator = std::make_unique<Calculator>(*inputReader, outputStream);
+        calculator = std::make_unique<Calculator>(*inputReader, loggerStub);
     }
 
     void TearDown() override {
         inputReader.reset();
         calculator.reset();
-        outputStream.str("");
+        loggerStub.reset();
     }
 };
 
@@ -44,7 +46,7 @@ TEST_F(CalculatorTest, calculationGivesProperResults) {
     auto result = calculator->calculate();
     ASSERT_EQ(Result::Status::success, result.status);
     ASSERT_EQ(34, result.value);
-    ASSERT_EQ(expectedOutput, outputStream.str());
+    ASSERT_EQ(expectedOutput, loggerStub.str());
 }
 
 TEST_F(CalculatorTest, calculationGivesProperResults2) {
@@ -64,7 +66,7 @@ TEST_F(CalculatorTest, calculationGivesProperResults2) {
     auto result = calculator->calculate();
     ASSERT_EQ(Result::Status::success, result.status);
     ASSERT_EQ(98, result.value);
-    ASSERT_EQ(expectedOutput, outputStream.str());
+    ASSERT_EQ(expectedOutput, loggerStub.str());
 }
 
 TEST_F(CalculatorTest, calculationGivesProperResults3) {
@@ -85,7 +87,7 @@ TEST_F(CalculatorTest, calculationGivesProperResults3) {
     auto result = calculator->calculate();
     ASSERT_EQ(Result::Status::success, result.status);
     ASSERT_EQ(-198, result.value);
-    ASSERT_EQ(expectedOutput, outputStream.str());
+    ASSERT_EQ(expectedOutput, loggerStub.str());
 }
 
 TEST_F(CalculatorTest, calculationGivesProperResults4) {
@@ -106,7 +108,7 @@ TEST_F(CalculatorTest, calculationGivesProperResults4) {
     auto result = calculator->calculate();
     ASSERT_EQ(Result::Status::success, result.status);
     ASSERT_EQ(-8, result.value);
-    ASSERT_EQ(expectedOutput, outputStream.str());
+    ASSERT_EQ(expectedOutput, loggerStub.str());
 }
 
 TEST_F(CalculatorTest, calculationThrowsDivisionByZero) {
@@ -130,5 +132,5 @@ TEST_F(CalculatorTest, calculationThrowsDivisionByZero) {
     auto result = calculator->calculate();
     ASSERT_EQ(Result::Status::error, result.status);
 
-    ASSERT_EQ(expectedOutput, outputStream.str());
+    ASSERT_EQ(expectedOutput, loggerStub.str());
 }

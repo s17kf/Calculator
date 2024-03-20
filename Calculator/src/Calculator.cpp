@@ -6,18 +6,20 @@
 
 #include "Stack.h"
 #include "List.h"
+#include "Logger.h"
 
 using data_structures::Stack;
 using data_structures::List;
+using input_output::Logger;
 
 namespace calculator {
 
     Result Calculator::calculate() {
         Stack<int> stack;
-        inputConverter.convertFormula();
-        inputConverter.printOutputQueue(ostream);
-        while (inputConverter.symbolsLeft()) {
-            Symbol *symbol = inputConverter.removeNextSymbol();
+        mInputConverter.convertFormula();
+        mInputConverter.printOutputQueue(mLogger);
+        while (mInputConverter.symbolsLeft()) {
+            Symbol *symbol = mInputConverter.removeNextSymbol();
             switch (symbol->tokenType) {
                 case TokenType::number:
                     stack.push(symbol->token.number);
@@ -33,11 +35,11 @@ namespace calculator {
                         stack.push(symbol->token.operation(a, b));
                     } catch (std::overflow_error &e) {
                         delete symbol;
-                        while (inputConverter.symbolsLeft()) {
-                            delete inputConverter.removeNextSymbol();
+                        while (mInputConverter.symbolsLeft()) {
+                            delete mInputConverter.removeNextSymbol();
                         }
 //                        throw std::overflow_error(e.what());
-                        return Result(Result::Status::error, 0);
+                        return {Result::Status::error, 0};
                     }
                     delete symbol;
                     break;
@@ -60,28 +62,36 @@ namespace calculator {
                     throw std::invalid_argument("Invalid argument during calculation");
             }
         }
-        return Result(Result::Status::success, stack.top());
+        return {Result::Status::success, stack.top()};
     }
 
-    void Calculator::handleUser(std::istream &istream, std::ostream &ostream) {
+    void Calculator::handleUser(std::istream &istream, Logger &logger) {
         unsigned int n;
         istream >> n;
 
         auto inputReader = InputReader(istream);
-        auto calculator = Calculator(inputReader, ostream);
+        auto calculator = Calculator(inputReader, logger);
 
         for (unsigned int i = 0; i < n; ++i) {
             try {
                 auto result = calculator.calculate();
                 if (result.status != Result::Status::success) {
-                    ostream << "ERROR" << std::endl;
+                    logger.log(Logger::Level::high, "ERROR\n");
                     continue;
                 }
-                ostream << result.value << std::endl;
-            } catch ([[maybe_unused]] std::runtime_error &e) {
-                ostream << "ERROR" << std::endl;
+                logger.log(Logger::Level::high, "%d\n", result.value);
+            } catch ([[maybe_unused]] std::exception &e) {
+                logger.log(Logger::Level::high, "Calculator error\n");
             }
         }
+    }
+
+    void Calculator::printCurrentOperation(Stack<int> &stack, Symbol *operation) {
+        mLogger.log(Logger::Level::medium, operation->str().c_str());
+        for (const auto &item: stack) {
+            mLogger.log(Logger::Level::medium, " %d", item);
+        }
+        mLogger.log(Logger::Level::medium, "\n");
     }
 
 } // calculator

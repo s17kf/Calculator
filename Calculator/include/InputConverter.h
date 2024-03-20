@@ -9,6 +9,7 @@
 #include "Queue.h"
 #include "Stack.h"
 #include "Symbol.h"
+#include "Logger.h"
 
 //#include "QueueVector.h"
 //#include "StackVector.h"
@@ -32,14 +33,7 @@ namespace calculator {
 
         [[nodiscard]] bool symbolsLeft() const { return !outputQueue.empty(); }
 
-        inline void printOutputQueue(std::ostream &ostream) {
-            auto it = outputQueue.begin();
-            ostream << (*it++)->str().c_str();
-            for (; it != outputQueue.end(); ++it) {
-                ostream << "  " << (*it)->str().c_str();
-            }
-            ostream << std::endl;
-        }
+        void printOutputQueue(input_output::Logger &logger);
 
     private:
         void handleComma(data_structures::Stack<Symbol *> &operatorStack);

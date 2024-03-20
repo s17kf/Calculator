@@ -5,6 +5,7 @@
 #include "InputConverter.h"
 
 using data_structures::Stack;
+using input_output::Logger;
 
 namespace calculator {
     void InputConverter::handleComma(Stack<Symbol *> &operatorStack) {
@@ -56,6 +57,15 @@ namespace calculator {
             outputQueue.push(operatorStack.top());
             operatorStack.pop();
         }
+    }
+
+    void InputConverter::printOutputQueue(Logger &logger) {
+        auto it = outputQueue.begin();
+        logger.log(Logger::Level::medium, (*it++)->str().c_str());
+        for (; it != outputQueue.end(); ++it) {
+            logger.log(Logger::Level::medium,  "  %s", (*it)->str().c_str());
+        }
+        logger.log(Logger::Level::medium, "\n");
     }
 
     void InputConverter::convertFormula() {
