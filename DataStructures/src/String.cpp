@@ -1,0 +1,56 @@
+//
+// Created by stefan on 20/03/24.
+//
+
+#include "String.h"
+
+#include <cstring>
+
+namespace data_structures {
+
+    String::String(const String &other) {
+        str = new char[strlen(other.str) + 1];
+        strncpy(str, other.str, strlen(other.str) + 1);
+    }
+
+    String::String(const char *s) {
+        if (s == nullptr) {
+            str = new char[1];
+            str[0] = '\0';
+            return;
+        }
+        const size_t charactersToCopy = strlen(s);
+        str = new char[charactersToCopy + 1];
+        str[charactersToCopy] = '\0';
+        strncpy(str, s, charactersToCopy);
+    }
+
+    String::String(size_t n) {
+        str = new char[n];
+    }
+
+    String &String::operator=(const String &other) {
+        if (this == &other)
+            return *this;
+        delete[] str;
+        str = new char [other.size() + 1];
+        strncpy(str, other.str, other.size()+1);
+        return *this;
+    }
+
+    size_t String::size() const {
+        return strlen(str);
+    }
+
+    String String::operator+(const String &other) const {
+        String result(size() + other.size() + 1);
+        strncpy(result.str, str ,size());
+        strncpy(&result.str[size()], other.str, other.size() + 1);
+        return result;
+    }
+
+    const char *String::c_str() const {
+        return str;
+    }
+
+} // data_structures
