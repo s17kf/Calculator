@@ -5,7 +5,7 @@
 #ifndef CALCULATORAADS_INPUTREADER_H
 #define CALCULATORAADS_INPUTREADER_H
 
-#include <istream>
+#include "UserInputReader.h"
 
 
 namespace calculator {
@@ -13,12 +13,12 @@ namespace calculator {
 
     class InputReader {
     public:
-        explicit InputReader(std::istream &inputStream) : inputStream(inputStream) {}
+        explicit InputReader(input_output::UserInputReader &userInputReader) : userInputReader(userInputReader) {}
 
         Symbol *getNextSymbol();
 
     private:
-        std::istream &inputStream;
+        input_output::UserInputReader &userInputReader;
     };
 
 } // calculator

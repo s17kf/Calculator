@@ -32,6 +32,7 @@ set(CALCULATOR_TEST_SOURCES
         Calculator/src/Calculator.cpp
         DataStructures/src/String.cpp
         InputOutput/src/LoggerStub.cpp
+        InputOutput/src/UserInputReaderStub.cpp
 )
 
 set(MAIN_SOURCES
@@ -42,6 +43,7 @@ set(MAIN_SOURCES
         Calculator/src/Symbol.cpp
         DataStructures/src/String.cpp
         InputOutput/src/ConsoleLogger.cpp
+        InputOutput/src/UserInputReaderImpl.cpp
 )
 
 add_executable(CalculatorAads ${MAIN_SOURCES})

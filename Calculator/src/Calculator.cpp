@@ -4,13 +4,19 @@
 
 #include "Calculator.h"
 
+#include <charconv>
+
 #include "Stack.h"
 #include "List.h"
 #include "Logger.h"
+#include "String.h"
 
 using data_structures::Stack;
 using data_structures::List;
+using data_structures::String;
+
 using input_output::Logger;
+using input_output::UserInputReader;
 
 namespace calculator {
 
@@ -65,11 +71,12 @@ namespace calculator {
         return {Result::Status::success, stack.top()};
     }
 
-    void Calculator::handleUser(std::istream &istream, Logger &logger) {
-        unsigned int n;
-        istream >> n;
+    void Calculator::handleUser(UserInputReader &userInputReader, Logger &logger) {
+        int n;
+        String nStr = userInputReader.getNextSymbol();
+        std::from_chars(nStr.c_str(), nStr.c_str() + nStr.size(), n);
 
-        auto inputReader = InputReader(istream);
+        auto inputReader = InputReader(userInputReader);
         auto calculator = Calculator(inputReader, logger);
 
         for (unsigned int i = 0; i < n; ++i) {

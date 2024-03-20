@@ -8,6 +8,7 @@
 #include "InputConverter.h"
 #include "InputReader.h"
 #include "Symbol.h"
+#include "UserInputReaderStub.h"
 
 using calculator::InputConverter;
 using calculator::InputReader;
@@ -18,6 +19,8 @@ using calculator::Token;
 using calculator::Operation;
 using calculator::Function;
 using calculator::Bracket;
+
+using input_output::UserInputReaderStub;
 
 
 class InputConverterTest : public ::testing::Test {
@@ -62,8 +65,8 @@ TEST_F(InputConverterTest, convertingFormula) {
             Symbol(TokenType::operation, Operation(Operation::Type::addition)),
     };
 
-    std::stringstream inputStream(inputExpression);
-    InputReader inputReader(inputStream);
+    UserInputReaderStub userInputReaderStub(inputExpression);
+    InputReader inputReader(userInputReaderStub);
     InputConverter inputConverter(inputReader);
 
     inputConverter.convertFormula();
@@ -91,8 +94,8 @@ TEST_F(InputConverterTest, convertingFormula2) {
             Symbol(TokenType::operation, Operation(Operation::Type::addition)),
     };
 
-    std::stringstream inputStream(inputExpression);
-    InputReader inputReader(inputStream);
+    UserInputReaderStub userInputReaderStub(inputExpression);
+    InputReader inputReader(userInputReaderStub);
     InputConverter inputConverter(inputReader);
 
     inputConverter.convertFormula();

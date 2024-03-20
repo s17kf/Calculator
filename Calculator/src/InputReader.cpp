@@ -6,13 +6,15 @@
 
 #include "InputReader.h"
 #include "Symbol.h"
+#include "String.h"
+
+using data_structures::String;
 
 namespace calculator {
 
     Symbol *InputReader::getNextSymbol() {
-        char input[11];
-        inputStream >> input;
-        switch (input[0]) {
+        String input = userInputReader.getNextSymbol();
+        switch (input.c_str()[0]) {
             case '.':
                 return new Symbol(TokenType::end, '.');
             case ',':
@@ -30,20 +32,20 @@ namespace calculator {
             case ')':
                 return new Symbol(TokenType::bracket, Bracket(Bracket::Type::right));
             case 'N':
-                if (strcmp(input, "N") == 0)
+                if (strcmp(input.c_str(), "N") == 0)
                     return new Symbol(TokenType::function, Function(Function::Type::negation));
             case 'I':
-                if (strcmp(input, "IF") == 0)
+                if (strcmp(input.c_str(), "IF") == 0)
                     return new Symbol(TokenType::function, Function(Function::Type::condition));
             case 'M':
-                if (strcmp(input, "MIN") == 0)
+                if (strcmp(input.c_str(), "MIN") == 0)
                     return new Symbol(TokenType::function, Function(Function::Type::min));
-                else if (strcmp(input, "MAX") == 0)
+                else if (strcmp(input.c_str(), "MAX") == 0)
                     return new Symbol(TokenType::function, Function(Function::Type::max));
             default: {
                 int number;
                 // TODO: use from_chars
-                sscanf(input, "%d", &number);
+                sscanf(input.c_str(), "%d", &number);
                 return new Symbol(TokenType::number, number);
             }
         }

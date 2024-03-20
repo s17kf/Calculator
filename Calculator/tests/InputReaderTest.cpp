@@ -9,6 +9,7 @@
 
 #include "InputReader.h"
 #include "Symbol.h"
+#include "UserInputReaderStub.h"
 
 using calculator::InputReader;
 using calculator::Symbol;
@@ -18,6 +19,8 @@ using calculator::Operation;
 using calculator::Function;
 using calculator::Bracket;
 using calculator::Token;
+
+using input_output::UserInputReaderStub;
 
 class InputReaderTest : public ::testing::Test {
 protected:
@@ -67,8 +70,8 @@ TEST_F(InputReaderTest, validMultiTypeInputTest) {
             Symbol(TokenType::number, 3),
     };
 
-    std::stringstream stream(inputExpression);
-    InputReader inputReader(stream);
+    UserInputReaderStub userInputReaderStub(inputExpression);
+    InputReader inputReader(userInputReaderStub);
     std::list<Symbol> actualSymbols;
 
     Symbol *lastSymbol;

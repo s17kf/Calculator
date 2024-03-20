@@ -12,6 +12,7 @@
 #include "Stack.h"
 #include "InputConverter.h"
 #include "Logger.h"
+#include "UserInputReader.h"
 
 namespace calculator {
 
@@ -35,7 +36,7 @@ namespace calculator {
 
         Result calculate();
 
-        static void handleUser(std::istream &istream, input_output::Logger &logger);
+        static void handleUser(input_output::UserInputReader &userInputReader, input_output::Logger &logger);
 
     private:
         inline void printCurrentOperation(data_structures::Stack<int> &stack, Symbol *operation);
