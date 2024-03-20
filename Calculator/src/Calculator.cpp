@@ -12,7 +12,7 @@ using data_structures::List;
 
 namespace calculator {
 
-    int Calculator::calculate() {
+    Result Calculator::calculate() {
         Stack<int> stack;
         inputConverter.convertFormula();
         inputConverter.printOutputQueue(ostream);
@@ -33,11 +33,11 @@ namespace calculator {
                         stack.push((*symbol->token->operation)(a, b));
                     } catch (std::overflow_error &e) {
                         delete symbol;
-                        while (inputConverter.symbolsLeft()){
+                        while (inputConverter.symbolsLeft()) {
                             delete inputConverter.removeNextSymbol();
                         }
 //                        throw std::overflow_error(e.what());
-                        return INT_MAX;
+                        return Result(Result::Status::error, 0);
                     }
                     delete symbol;
                     break;
@@ -60,7 +60,7 @@ namespace calculator {
                     throw std::invalid_argument("Invalid argument during calculation");
             }
         }
-        return stack.top();
+        return Result(Result::Status::success, stack.top());
     }
 
     void Calculator::handleUser(std::istream &istream, std::ostream &ostream) {
@@ -72,12 +72,12 @@ namespace calculator {
 
         for (unsigned int i = 0; i < n; ++i) {
             try {
-                int result = calculator.calculate();
-                if (result == INT_MAX) {
+                auto result = calculator.calculate();
+                if (result.status != Result::Status::success) {
                     ostream << "ERROR" << std::endl;
                     continue;
                 }
-                ostream << result << std::endl;
+                ostream << result.value << std::endl;
             } catch ([[maybe_unused]] std::runtime_error &e) {
                 ostream << "ERROR" << std::endl;
             }

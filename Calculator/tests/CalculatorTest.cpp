@@ -10,6 +10,7 @@
 
 using calculator::Calculator;
 using calculator::InputReader;
+using calculator::Result;
 
 class CalculatorTest : public ::testing::Test {
 protected:
@@ -40,7 +41,9 @@ TEST_F(CalculatorTest, calculationGivesProperResults) {
             "MIN4 77 35 36 66 80 34 100\n"
             "MIN6 60 50 35 80 34 100\n";
 
-    ASSERT_EQ(34, calculator->calculate());
+    auto result = calculator->calculate();
+    ASSERT_EQ(Result::Status::success, result.status);
+    ASSERT_EQ(34, result.value);
     ASSERT_EQ(expectedOutput, outputStream.str());
 }
 
@@ -58,7 +61,9 @@ TEST_F(CalculatorTest, calculationGivesProperResults2) {
             "* 3 32 2\n"
             "+ 96 2\n";
 
-    ASSERT_EQ(98, calculator->calculate());
+    auto result = calculator->calculate();
+    ASSERT_EQ(Result::Status::success, result.status);
+    ASSERT_EQ(98, result.value);
     ASSERT_EQ(expectedOutput, outputStream.str());
 }
 
@@ -77,7 +82,9 @@ TEST_F(CalculatorTest, calculationGivesProperResults3) {
             "N -200 -398\n"
             "+ 200 -398\n";
 
-    ASSERT_EQ(-198, calculator->calculate());
+    auto result = calculator->calculate();
+    ASSERT_EQ(Result::Status::success, result.status);
+    ASSERT_EQ(-198, result.value);
     ASSERT_EQ(expectedOutput, outputStream.str());
 }
 
@@ -96,7 +103,9 @@ TEST_F(CalculatorTest, calculationGivesProperResults4) {
             "N 3 24\n"
             "/ -3 24\n";
 
-    ASSERT_EQ(-8, calculator->calculate());
+    auto result = calculator->calculate();
+    ASSERT_EQ(Result::Status::success, result.status);
+    ASSERT_EQ(-8, result.value);
     ASSERT_EQ(expectedOutput, outputStream.str());
 }
 
@@ -118,7 +127,8 @@ TEST_F(CalculatorTest, calculationThrowsDivisionByZero) {
             "/ 0 9 13 2\n";
 
 //    ASSERT_THROW(calculator->calculate(), std::overflow_error);
-    EXPECT_EQ(INT_MAX, calculator->calculate());
+    auto result = calculator->calculate();
+    ASSERT_EQ(Result::Status::error, result.status);
 
     ASSERT_EQ(expectedOutput, outputStream.str());
 }

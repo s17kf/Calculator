@@ -14,13 +14,25 @@
 
 namespace calculator {
 
+    struct Result {
+        enum class Status {
+            success,
+            error,
+        };
+
+        Result(Status status, int value) : status(status), value(value) {}
+
+        Status status;
+        int value;
+    };
+
     class Calculator {
     public:
         explicit Calculator(InputReader &inputReader, std::ostream &ostream = std::cout) :
                 inputConverter(inputReader),
                 ostream(ostream) {}
 
-        int calculate();
+        Result calculate();
 
         static void handleUser(std::istream &istream = std::cin, std::ostream &ostream = std::cout);
 
