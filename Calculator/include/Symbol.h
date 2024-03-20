@@ -121,8 +121,10 @@ namespace calculator {
                     break;
                 case TokenType::function:
                     token->function.reset();
+                    break;
                 case TokenType::bracket:
                     token->bracket.reset();
+                    break;
             }
             delete token;
         }
