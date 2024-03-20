@@ -6,6 +6,7 @@
 #define CALCULATORAADS_SYMBOL_H
 
 #include "List.h"
+#include "String.h"
 
 namespace calculator {
 
@@ -25,7 +26,7 @@ namespace calculator {
 
         explicit Operation(Operation::Type type) : type(type) {}
 
-        [[nodiscard]] const char *str() const;
+        [[nodiscard]] data_structures::String str() const;
 
         int operator()(int a, int b) const;
 
@@ -45,7 +46,7 @@ namespace calculator {
 
         explicit Function(Function::Type type, unsigned int argc = 1) : type(type), argc(argc) {}
 
-        [[nodiscard]] const char *str() const;
+        [[nodiscard]] data_structures::String str() const;
 
         int operator()(data_structures::List<int> &args) const;
 
@@ -64,15 +65,7 @@ namespace calculator {
 
         explicit Bracket(Bracket::Type type) : type(type) {}
 
-        [[nodiscard]] const char *str() const {
-            switch (type) {
-                case Type::left:
-                    return "(";
-                case Type::right:
-                    return ")";
-            }
-            throw std::invalid_argument("Invalid type in bracket->str() conversion");
-        }
+        [[nodiscard]] data_structures::String str() const;
 
         bool operator==(const Bracket &other) const {
             return type == other.type;
@@ -120,13 +113,11 @@ namespace calculator {
 
         Symbol(TokenType tokenType, char c) : tokenType(tokenType), token(c) {}
 
+        [[nodiscard]] data_structures::String str() const;
+
         TokenType tokenType;
         Token token;
     };
-
-    std::ostream &operator<<(std::ostream &stream, const Bracket &bracket);
-
-    std::ostream &operator<<(std::ostream &stream, const Symbol &symbol);
 
     bool operator==(const Symbol &s1, const Symbol &s2);
 

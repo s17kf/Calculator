@@ -34,9 +34,9 @@ namespace calculator {
 
         inline void printOutputQueue(std::ostream &ostream) {
             auto it = outputQueue.begin();
-            ostream << *(*it++);
+            ostream << (*it++)->str().c_str();
             for (; it != outputQueue.end(); ++it) {
-                ostream << "  " << *(*it);
+                ostream << "  " << (*it)->str().c_str();
             }
             ostream << std::endl;
         }

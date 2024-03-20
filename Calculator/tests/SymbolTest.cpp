@@ -20,45 +20,43 @@ using data_structures::List;
 
 class SymbolTest : public ::testing::Test {
 protected:
-    static void verifyStreamResult(const Symbol &symbol, const std::string &expectedContent) {
-        std::stringstream stream;
-        stream << symbol;
-        ASSERT_EQ(expectedContent, stream.str());
+    static void verifyStrResult(const Symbol &symbol, const std::string &expectedContent) {
+        ASSERT_EQ(expectedContent, symbol.str().c_str());
     }
 
 };
 
 TEST_F(SymbolTest, SymbolStrTest) {
     Symbol number(TokenType::number, 1234);
-    verifyStreamResult(number, "1234");
+    verifyStrResult(number, "1234");
 
     Symbol plus(calculator::TokenType::operation, Operation(Operation::Type::addition));
     Symbol minus(calculator::TokenType::operation, Operation(Operation::Type::subtraction));
     Symbol multiply(calculator::TokenType::operation, Operation(Operation::Type::multiplying));
     Symbol divide(calculator::TokenType::operation, Operation(Operation::Type::division));
-    verifyStreamResult(plus, "+");
-    verifyStreamResult(minus, "-");
-    verifyStreamResult(multiply, "*");
-    verifyStreamResult(divide, "/");
+    verifyStrResult(plus, "+");
+    verifyStrResult(minus, "-");
+    verifyStrResult(multiply, "*");
+    verifyStrResult(divide, "/");
 
     Symbol condition(calculator::TokenType::function, Function(Function::Type::condition));
     Symbol negation(calculator::TokenType::function, Function(Function::Type::negation));
     Symbol min(calculator::TokenType::function, Function(Function::Type::min, 0));
     Symbol max(calculator::TokenType::function, Function(Function::Type::max, 0));
-    verifyStreamResult(condition, "IF");
-    verifyStreamResult(negation, "N");
-    verifyStreamResult(min, "MIN0");
-    verifyStreamResult(max, "MAX0");
+    verifyStrResult(condition, "IF");
+    verifyStrResult(negation, "N");
+    verifyStrResult(min, "MIN0");
+    verifyStrResult(max, "MAX0");
 
     Symbol bracketLeft(TokenType::bracket, Bracket(Bracket::Type::left));
     Symbol bracketRight(TokenType::bracket, Bracket(Bracket::Type::right));
-    verifyStreamResult(bracketLeft, "(");
-    verifyStreamResult(bracketRight, ")");
+    verifyStrResult(bracketLeft, "(");
+    verifyStrResult(bracketRight, ")");
 
     Symbol comma(TokenType::comma, ',');
     Symbol dot(TokenType::end, '.');
-    verifyStreamResult(comma, ",");
-    verifyStreamResult(dot, ".");
+    verifyStrResult(comma, ",");
+    verifyStrResult(dot, ".");
 }
 
 TEST_F(SymbolTest, operationsGiveProperResults) {

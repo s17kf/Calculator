@@ -42,6 +42,7 @@ namespace calculator {
                     return new Symbol(TokenType::function, Function(Function::Type::max));
             default: {
                 int number;
+                // TODO: use from_chars
                 sscanf(input, "%d", &number);
                 return new Symbol(TokenType::number, number);
             }

@@ -13,6 +13,9 @@ namespace data_structures {
     public:
         String(const String &other);
 
+
+        explicit String(const char c);
+
         explicit String(const char *s = nullptr);
 
         ~String() {
@@ -24,6 +27,8 @@ namespace data_structures {
         size_t size() const;
 
         String operator+(const String &other) const;
+
+        String operator+(int number) const;
 
         const char *c_str() const;
 

@@ -19,6 +19,12 @@ TEST_F(StringTest, emptyString) {
     ASSERT_EQ('\0', s.c_str()[0]);
 }
 
+TEST_F(StringTest, oneCharString) {
+    String s('f');
+    ASSERT_EQ(1, s.size());
+    ASSERT_EQ('f', s.c_str()[0]);
+}
+
 TEST_F(StringTest, stringTest) {
     const char testString[] = "Test string";
     String s(testString);
@@ -35,4 +41,20 @@ TEST_F(StringTest, stringConcatenation) {
     const size_t expectedSize = s1.size() + s2.size();
     ASSERT_EQ(expectedSize, result.size());
     ASSERT_EQ(0, std::strcmp(expectedResult, result.c_str()));
+}
+
+TEST_F(StringTest, stringAndNumberConcatenation) {
+    const String s("str");
+    const int oneDigitNumber = 5;
+    const int twoDigitNumber = 24;
+    const char expectedOneDigitResult[] = "str5";
+    const char expectedTwoDigitResult[] = "str24";
+
+    String oneDigitResult = s + oneDigitNumber;
+    String twoDigitResult = s + twoDigitNumber;
+
+    ASSERT_EQ(4, oneDigitResult.size());
+    ASSERT_EQ(0, std::strcmp(expectedOneDigitResult, oneDigitResult.c_str()));
+    ASSERT_EQ(0, std::strcmp(expectedTwoDigitResult, twoDigitResult.c_str()));
+    ASSERT_EQ(5, twoDigitResult.size());
 }

@@ -38,7 +38,7 @@ namespace calculator {
 
     private:
         inline void printCurrentOperation(data_structures::Stack<int> &stack, Symbol *operation) {
-            ostream << *operation;
+            ostream << operation->str().c_str();
             for (const auto &item: stack) {
                 ostream << " " << item;
             }

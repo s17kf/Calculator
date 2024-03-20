@@ -5,12 +5,17 @@
 #include "String.h"
 
 #include <cstring>
+#include <charconv>
 
 namespace data_structures {
 
     String::String(const String &other) {
         str = new char[strlen(other.str) + 1];
         strncpy(str, other.str, strlen(other.str) + 1);
+    }
+
+    String::String(const char c) {
+        str = new char [2] {c, '\0'};
     }
 
     String::String(const char *s) {
@@ -46,6 +51,16 @@ namespace data_structures {
         String result(size() + other.size() + 1);
         strncpy(result.str, str ,size());
         strncpy(&result.str[size()], other.str, other.size() + 1);
+        return result;
+    }
+
+    String String::operator+(int number) const {
+        char numberStr[8] = {};
+        std::to_chars(numberStr, numberStr + 8, number);
+        String result(size() + strlen(numberStr) + 1);
+        strncpy(result.str, str ,size());
+
+        strncpy(&result.str[size()], numberStr, strlen(numberStr) + 1);
         return result;
     }
 

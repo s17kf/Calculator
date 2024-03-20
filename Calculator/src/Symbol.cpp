@@ -2,22 +2,23 @@
 // Created by stefan on 14/03/24.
 //
 
-#include <ostream>
-
 #include "Symbol.h"
+#include "String.h"
 
 namespace calculator {
 
-    const char *Operation::str() const {
+    using data_structures::String;
+
+    String Operation::str() const {
         switch (type) {
             case Type::addition:
-                return "+";
+                return String("+");
             case Type::subtraction:
-                return "-";
+                return String("-");
             case Type::multiplying:
-                return "*";
+                return String("*");
             case Type::division:
-                return "/";
+                return String("/");
         }
         throw std::invalid_argument("Invalid type in operation->str() conversion");
     }
@@ -38,30 +39,16 @@ namespace calculator {
         throw std::invalid_argument("Invalid type in operation->()");
     }
 
-    const char *Function::str() const {
+    String Function::str() const {
         switch (type) {
-            case Type::condition: {
-                char *result = new char[3];
-                sprintf(result, "IF");
-                return result;
-            }
-            case Type::negation: {
-                char *result = new char[2];
-                sprintf(result, "N");
-                return result;
-            }
-            case Type::min: {
-                char *result = new char[10];
-                sprintf(result, "MIN");
-                sprintf(&result[3], "%u", argc);
-                return result;
-            }
-            case Type::max: {
-                char *result = new char[10];
-                sprintf(result, "MAX");
-                sprintf(&result[3], "%u", argc);
-                return result;
-            }
+            case Type::condition:
+                return String("IF");
+            case Type::negation:
+                return String("N");
+            case Type::min:
+                return String("MIN") + argc;
+            case Type::max:
+                return String("MAX") + argc;
         }
         throw std::invalid_argument("Invalid type in function->str() conversion");
     }
@@ -102,38 +89,32 @@ namespace calculator {
         throw std::invalid_argument("Invalid type in function->()");
     }
 
-    std::ostream &operator<<(std::ostream &stream, const Bracket &bracket) {
-        stream << bracket.str();
-        return stream;
+    String Bracket::str() const {
+        switch (type) {
+            case Type::left:
+                return String("(");
+            case Type::right:
+                return String(")");
+        }
+        throw std::invalid_argument("Invalid type in bracket->str() conversion");
     }
 
-    std::ostream &operator<<(std::ostream &stream, const Symbol &symbol) {
-        switch (symbol.tokenType) {
+    data_structures::String Symbol::str() const {
+        switch (tokenType) {
             case TokenType::number:
-                stream << symbol.token.number;
-                break;
+                return String() + token.number;
             case TokenType::operation:
-                stream << symbol.token.operation.str();
-                break;
-            case TokenType::function: {
-                const char *functionStr = symbol.token.function.str();
-                stream << functionStr;
-                delete[] functionStr;
-                break;
-            }
+                return token.operation.str();
+            case TokenType::function:
+                return token.function.str();
             case TokenType::bracket:
-                stream << symbol.token.bracket;
-                break;
+                return token.bracket.str();
             case TokenType::comma:
-                stream << ',';
-                break;
+                return String(token.comma);
             case TokenType::end:
-                stream << symbol.token.end;
-                break;
-            default:
-                throw std::invalid_argument("Invalid symbol in stream opertator!");
+                return String(token.end);
         }
-        return stream;
+        throw std::invalid_argument("Invalid type in symbol->str() conversion");
     }
 
     bool operator==(const Symbol &s1, const Symbol &s2) {

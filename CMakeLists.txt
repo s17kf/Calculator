@@ -29,6 +29,7 @@ set(CALCULATOR_TEST_SOURCES
         Calculator/src/InputReader.cpp
         Calculator/src/InputConverter.cpp
         Calculator/src/Calculator.cpp
+        DataStructures/src/String.cpp
 )
 
 set(MAIN_SOURCES
@@ -37,6 +38,7 @@ set(MAIN_SOURCES
         Calculator/src/InputConverter.cpp
         Calculator/src/InputReader.cpp
         Calculator/src/Symbol.cpp
+        DataStructures/src/String.cpp
 )
 
 add_executable(CalculatorAads ${MAIN_SOURCES})
