@@ -30,7 +30,7 @@ namespace calculator {
 
         int operator()(int a, int b) const;
 
-        bool operator==(const Operation &other) const {
+        constexpr bool operator==(const Operation &other) const {
             return type == other.type;
         }
 
@@ -50,7 +50,7 @@ namespace calculator {
 
         int operator()(data_structures::List<int> &args) const;
 
-        bool operator==(const Function &other) const {
+        constexpr bool operator==(const Function &other) const {
             return type == other.type && argc == other.argc;
         }
 
@@ -67,7 +67,7 @@ namespace calculator {
 
         [[nodiscard]] data_structures::String str() const;
 
-        bool operator==(const Bracket &other) const {
+        constexpr bool operator==(const Bracket &other) const {
             return type == other.type;
         }
 
@@ -120,10 +120,6 @@ namespace calculator {
     };
 
     bool operator==(const Symbol &s1, const Symbol &s2);
-
-    bool operator<(const Operation &o1, const Operation &o2);
-
-    bool operator<=(const Operation &o1, const Operation &o2);
 
 } // calculator
 

@@ -6,6 +6,7 @@
 #define CALCULATORAADS_STRING_H
 
 #include <cstdio>
+#include <cstring>
 
 namespace data_structures {
 
@@ -14,7 +15,7 @@ namespace data_structures {
         String(const String &other);
 
 
-        explicit String(const char c);
+        explicit String(char c);
 
         explicit String(const char *s = nullptr);
 
@@ -22,18 +23,19 @@ namespace data_structures {
             delete[] str;
         }
 
-        String& operator=(const String &other);
+        String &operator=(const String &other);
 
-        size_t size() const;
+        [[nodiscard]] size_t size() const { return strlen(str); }
 
         String operator+(const String &other) const;
 
         String operator+(int number) const;
 
-        const char *c_str() const;
+        [[nodiscard]] constexpr const char *c_str() const { return str; }
 
     private:
-        String(size_t n);
+        explicit String(size_t n);
+
         char *str;
     };
 

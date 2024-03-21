@@ -21,7 +21,7 @@ namespace calculator {
     void InputConverter::handleOperation(Stack<Symbol *> &operatorStack, Symbol *lastSymbol) {
         while (!operatorStack.empty() &&
                operatorStack.top()->tokenType == TokenType::operation &&
-               lastSymbol->token.operation <= operatorStack.top()->token.operation) {
+               lastSymbol->token.operation.prio() <= operatorStack.top()->token.operation.prio()) {
             outputQueue.push(operatorStack.top());
             operatorStack.pop();
         }

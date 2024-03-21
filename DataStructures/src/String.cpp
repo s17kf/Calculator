@@ -4,7 +4,6 @@
 
 #include "String.h"
 
-#include <cstring>
 #include <charconv>
 
 namespace data_structures {
@@ -43,10 +42,6 @@ namespace data_structures {
         return *this;
     }
 
-    size_t String::size() const {
-        return strlen(str);
-    }
-
     String String::operator+(const String &other) const {
         String result(size() + other.size() + 1);
         strncpy(result.str, str ,size());
@@ -62,10 +57,6 @@ namespace data_structures {
 
         strncpy(&result.str[size()], numberStr, strlen(numberStr) + 1);
         return result;
-    }
-
-    const char *String::c_str() const {
-        return str;
     }
 
 } // data_structures

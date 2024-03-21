@@ -12,13 +12,13 @@ namespace calculator {
     String Operation::str() const {
         switch (type) {
             case Type::addition:
-                return String("+");
+                return String('+');
             case Type::subtraction:
-                return String("-");
+                return String('-');
             case Type::multiplying:
-                return String("*");
+                return String('*');
             case Type::division:
-                return String("/");
+                return String('/');
         }
         throw std::invalid_argument("Invalid type in operation->str() conversion");
     }
@@ -92,9 +92,9 @@ namespace calculator {
     String Bracket::str() const {
         switch (type) {
             case Type::left:
-                return String("(");
+                return String('(');
             case Type::right:
-                return String(")");
+                return String(')');
         }
         throw std::invalid_argument("Invalid type in bracket->str() conversion");
     }
@@ -134,15 +134,6 @@ namespace calculator {
                 return true;
         }
         throw std::invalid_argument("Invalid type in symbol->== operator");
-    }
-
-    bool operator<(const Operation &o1, const Operation &o2) {
-        return o1.prio() < o2.prio();
-    }
-
-
-    bool operator<=(const Operation &o1, const Operation &o2) {
-        return o1.prio() <= o2.prio();
     }
 
     unsigned int Operation::prio() const {
