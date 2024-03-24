@@ -48,8 +48,6 @@ namespace calculator {
 
         [[nodiscard]] data_structures::String str() const;
 
-        int operator()(data_structures::List<int> &args) const;
-
         constexpr bool operator==(const Function &other) const {
             return type == other.type && argc == other.argc;
         }

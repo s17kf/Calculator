@@ -9,11 +9,9 @@ using input_output::Logger;
 
 namespace calculator {
     void InputConverter::handleComma(Stack<Symbol *> &operatorStack) {
-        Symbol *topSymbol = operatorStack.top();
-        while (topSymbol->tokenType != TokenType::bracket) {
+        while (operatorStack.top()->tokenType != TokenType::bracket) {
             // don't need to check bracket direction because only left brackets are added to operatorStack
             outputQueue.push(operatorStack.pop());
-            topSymbol = operatorStack.top();
         }
     }
 
@@ -27,20 +25,16 @@ namespace calculator {
     }
 
     void InputConverter::handleRightBracket(Stack<Symbol *> &operatorStack, Stack<unsigned int *> &argumentCounters) {
-        Symbol *topSymbol = operatorStack.top();
-        while (topSymbol->tokenType != TokenType::bracket) {
+        while (operatorStack.top()->tokenType != TokenType::bracket) {
             // don't need to check bracket direction because only left brackets are added to operatorStack
             outputQueue.push(operatorStack.pop());
-            topSymbol = operatorStack.top();
         }
-        operatorStack.pop();
-        delete topSymbol; // it is left bracket
+        delete operatorStack.pop(); // it is left bracket
         if (!operatorStack.empty()) {
-            topSymbol = operatorStack.top();
-            if (topSymbol->tokenType == TokenType::function) {
-                outputQueue.push(operatorStack.pop());
-                if (topSymbol->token.function.type != Function::Type::negation)
+            if (operatorStack.top()->tokenType == TokenType::function) {
+                if (operatorStack.top()->token.function.type != Function::Type::negation)
                     argumentCounters.pop();
+                outputQueue.push(operatorStack.pop());
             }
         }
     }
@@ -58,7 +52,7 @@ namespace calculator {
         auto it = outputQueue.begin();
         logger.log(Logger::Level::medium, (*it++)->str().c_str());
         for (; it != outputQueue.end(); ++it) {
-            logger.log(Logger::Level::medium,  "  %s", (*it)->str().c_str());
+            logger.log(Logger::Level::medium, "  %s", (*it)->str().c_str());
         }
         logger.log(Logger::Level::medium, "\n");
     }

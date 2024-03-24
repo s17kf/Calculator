@@ -29,7 +29,10 @@ protected:
         uint readSymbols = 0;
         while (inputConverter.symbolsLeft()) {
             Symbol *symbol = inputConverter.removeNextSymbol();
-            ASSERT_EQ(expectedSymbols[readSymbols], *symbol) << "Wrong symbol at index: " << readSymbols;
+            ASSERT_EQ(expectedSymbols[readSymbols], *symbol)
+                                        << "Wrong symbol at index: " << readSymbols;
+//                                        << " expected: " << expectedSymbols[readSymbols].str().c_str()
+//                                        << " actual " << symbol->str().c_str();
             delete symbol;
             ++readSymbols;
         }

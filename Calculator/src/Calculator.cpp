@@ -51,11 +51,38 @@ namespace calculator {
                 case TokenType::function: {
                     printCurrentOperation(stack, symbol);
                     unsigned int argc = symbol->token.function.argc;
-                    List<int> args;
-                    while (argc--) {
-                        args.pushBack(stack.pop());
+                    switch (symbol->token.function.type) {
+                        case Function::Type::condition: {
+                            int c = stack.pop();
+                            int b = stack.pop();
+                            int a = stack.pop();
+                            stack.push(a > 0 ? b : c);
+                            break;
+                        }
+                        case Function::Type::negation:
+                            stack.push(-stack.pop());
+                            break;
+                        case Function::Type::min: {
+                            int currentMin = stack.pop();
+                            while (--argc) {
+                                if (stack.top() < currentMin)
+                                    currentMin = stack.top();
+                                stack.pop();
+                            }
+                            stack.push(currentMin);
+                            break;
+                        }
+                        case Function::Type::max: {
+                            int currentMax = stack.pop();
+                            while (--argc) {
+                                if (stack.top() > currentMax)
+                                    currentMax = stack.top();
+                                stack.pop();
+                            }
+                            stack.push(currentMax);
+                            break;
+                        }
                     }
-                    stack.push((symbol->token.function)(args));
                     delete symbol;
                     break;
                 }

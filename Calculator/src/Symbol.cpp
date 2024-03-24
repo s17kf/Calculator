@@ -53,42 +53,6 @@ namespace calculator {
         throw std::invalid_argument("Invalid type in function->str() conversion");
     }
 
-    int Function::operator()(data_structures::List<int> &args) const {
-        if (args.size() != argc)
-            throw std::out_of_range("Bad number of function args");
-
-        switch (type) {
-            case Type::condition: {
-                int cond = args.back();
-                args.popBack();
-                return cond > 0 ? args.back() : args.front();
-            }
-            case Type::negation:
-                return -args.front();
-            case Type::min: {
-                int currentMin = args.front();
-                args.popFront();
-                while (!args.empty()) {
-                    if (args.front() < currentMin)
-                        currentMin = args.front();
-                    args.popFront();
-                }
-                return currentMin;
-            }
-            case Type::max: {
-                int currentMax = args.front();
-                args.popFront();
-                while (!args.empty()) {
-                    if (args.front() > currentMax)
-                        currentMax = args.front();
-                    args.popFront();
-                }
-                return currentMax;
-            }
-        }
-        throw std::invalid_argument("Invalid type in function->()");
-    }
-
     String Bracket::str() const {
         switch (type) {
             case Type::left:
