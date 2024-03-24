@@ -33,10 +33,12 @@ TEST_F(QueueTest, QueueAddReadRemoveElement) {
     ASSERT_EQ(initialData.size(), queue->size());
 
     std::list<int> readValues;
+    std::list<int> poppedValues;
     while (!queue->empty()) {
         readValues.emplace_back(queue->front());
-        queue->pop();
+        poppedValues.emplace_back(queue->pop());
     }
 
     ASSERT_EQ(initialData, readValues);
+    ASSERT_EQ(initialData, poppedValues);
 }

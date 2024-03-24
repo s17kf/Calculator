@@ -34,12 +34,14 @@ TEST_F(StackTest, StackAddReadRemoveElement) {
     ASSERT_EQ(initialData.size(), stack->size());
 
     std::list<int> readValues;
+    std::list<int> poppedValues;
     while (!stack->empty()) {
         readValues.emplace_back(stack->top());
-        stack->pop();
+        poppedValues.emplace_back(stack->pop());
     }
 
     ASSERT_EQ(reversedData, readValues);
+    ASSERT_EQ(reversedData, poppedValues);
 }
 
 TEST_F(StackTest, ReadElementFromEmptyStack) {

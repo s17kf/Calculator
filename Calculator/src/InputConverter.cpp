@@ -12,8 +12,7 @@ namespace calculator {
         Symbol *topSymbol = operatorStack.top();
         while (topSymbol->tokenType != TokenType::bracket) {
             // don't need to check bracket direction because only left brackets are added to operatorStack
-            outputQueue.push(topSymbol);
-            operatorStack.pop();
+            outputQueue.push(operatorStack.pop());
             topSymbol = operatorStack.top();
         }
     }
@@ -22,8 +21,7 @@ namespace calculator {
         while (!operatorStack.empty() &&
                operatorStack.top()->tokenType == TokenType::operation &&
                lastSymbol->token.operation.prio() <= operatorStack.top()->token.operation.prio()) {
-            outputQueue.push(operatorStack.top());
-            operatorStack.pop();
+            outputQueue.push(operatorStack.pop());
         }
         operatorStack.push(lastSymbol);
     }
@@ -32,8 +30,7 @@ namespace calculator {
         Symbol *topSymbol = operatorStack.top();
         while (topSymbol->tokenType != TokenType::bracket) {
             // don't need to check bracket direction because only left brackets are added to operatorStack
-            outputQueue.push(topSymbol);
-            operatorStack.pop();
+            outputQueue.push(operatorStack.pop());
             topSymbol = operatorStack.top();
         }
         operatorStack.pop();
@@ -41,8 +38,7 @@ namespace calculator {
         if (!operatorStack.empty()) {
             topSymbol = operatorStack.top();
             if (topSymbol->tokenType == TokenType::function) {
-                outputQueue.push(topSymbol);
-                operatorStack.pop();
+                outputQueue.push(operatorStack.pop());
                 if (topSymbol->token.function.type != Function::Type::negation)
                     argumentCounters.pop();
             }
@@ -54,8 +50,7 @@ namespace calculator {
         while (!operatorStack.empty() &&
                operatorStack.top()->tokenType == TokenType::function &&
                operatorStack.top()->token.function.type == Function::Type::negation) {
-            outputQueue.push(operatorStack.top());
-            operatorStack.pop();
+            outputQueue.push(operatorStack.pop());
         }
     }
 
@@ -110,16 +105,13 @@ namespace calculator {
         }
         delete lastSymbol;
         while (!operatorStack.empty()) {
-            outputQueue.push(operatorStack.top());
-            operatorStack.pop();
+            outputQueue.push(operatorStack.pop());
 
         }
     }
 
     Symbol *InputConverter::removeNextSymbol() {
-        Symbol *symbol = outputQueue.front();
-        outputQueue.pop();
-        return symbol;
+        return outputQueue.pop();;
     }
 
 } // calculator

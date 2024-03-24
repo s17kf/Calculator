@@ -149,26 +149,30 @@ namespace data_structures {
             return afterLast->prev->data;
         }
 
-        void popFront() {
+        T popFront() {
             if (mSize == 0) {
                 throw std::out_of_range("Try to remove (first) element from empty list!");
             }
+            T data = beforeFirst->next->data;
             Node *firstNode = beforeFirst->next;
             beforeFirst->next = firstNode->next;
             firstNode->next->prev = beforeFirst;
             delete firstNode;
             --mSize;
+            return data;
         }
 
-        void popBack() {
+        T popBack() {
             if (mSize == 0) {
                 throw std::out_of_range("Try to remove (last) element from empty list!");
             }
+            T data = afterLast->prev->data;
             Node *lastNode = afterLast->prev;
             afterLast->prev = lastNode->prev;
             lastNode->prev->next = afterLast;
             delete lastNode;
             --mSize;
+            return data;
         }
 
     private:

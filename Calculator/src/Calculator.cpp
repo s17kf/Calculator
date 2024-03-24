@@ -33,10 +33,8 @@ namespace calculator {
                     break;
                 case TokenType::operation: {
                     printCurrentOperation(stack, symbol);
-                    int a = stack.top();
-                    stack.pop();
-                    int b = stack.top();
-                    stack.pop();
+                    int a = stack.pop();
+                    int b = stack.pop();
                     try {
                         stack.push(symbol->token.operation(a, b));
                     } catch (std::overflow_error &e) {
@@ -55,8 +53,7 @@ namespace calculator {
                     unsigned int argc = symbol->token.function.argc;
                     List<int> args;
                     while (argc--) {
-                        args.pushBack(stack.top());
-                        stack.pop();
+                        args.pushBack(stack.pop());
                     }
                     stack.push((symbol->token.function)(args));
                     delete symbol;

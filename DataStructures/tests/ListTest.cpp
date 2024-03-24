@@ -139,10 +139,10 @@ TEST_F(ListTest, popFrontElement) {
     list->pushBack(2);
     list->pushBack(5);
 
-    list->popFront();
+    ASSERT_EQ(1, list->popFront());
     ASSERT_EQ(2, list->front());
 
-    list->popFront();
+    ASSERT_EQ(2, list->popFront());
     ASSERT_EQ(5, list->front());
     ASSERT_EQ(1, list->size());
 }
@@ -153,10 +153,10 @@ TEST_F(ListTest, popBackElement) {
     list->pushBack(2);
     list->pushBack(5);
 
-    list->popBack();
+    ASSERT_EQ(5, list->popBack());
     ASSERT_EQ(2, list->back());
 
-    list->popBack();
+    ASSERT_EQ(2, list->popBack());
     ASSERT_EQ(1, list->back());
     ASSERT_EQ(1, list->size());
 }

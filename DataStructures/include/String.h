@@ -14,7 +14,6 @@ namespace data_structures {
     public:
         String(const String &other);
 
-
         explicit String(char c);
 
         explicit String(const char *s = nullptr);

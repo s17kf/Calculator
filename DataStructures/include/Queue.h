@@ -16,8 +16,8 @@ namespace data_structures {
             data.pushBack(value);
         }
 
-        void pop() {
-            data.popFront();
+        T pop() {
+            return data.popFront();
         }
 
         [[nodiscard]] constexpr T &front() const {

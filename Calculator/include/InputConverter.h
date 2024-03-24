@@ -22,8 +22,7 @@ namespace calculator {
 
         ~InputConverter() {
             while (!outputQueue.empty()) {
-                delete outputQueue.front();
-                outputQueue.pop();
+                delete outputQueue.pop();
             }
         }
 
