@@ -50,11 +50,11 @@ namespace calculator {
 
     void InputConverter::printOutputQueue(Logger &logger) {
         auto it = outputQueue.begin();
-        logger.log(Logger::Level::medium, (*it++)->str().c_str());
+        logger.log((*it++)->str().c_str());
         for (; it != outputQueue.end(); ++it) {
-            logger.log(Logger::Level::medium, "  %s", (*it)->str().c_str());
+            logger.log("  %s", (*it)->str().c_str());
         }
-        logger.log(Logger::Level::medium, "\n");
+        logger.log("\n");
     }
 
     void InputConverter::convertFormula() {

@@ -8,7 +8,7 @@ using input_output::Logger;
 using input_output::UserInputReaderImpl;
 
 int main() {
-    ConsoleLogger logger(Logger::Level::medium);
+    ConsoleLogger logger;
     UserInputReaderImpl userInputReader;
 
     calculator::Calculator::handleUser(userInputReader, logger);

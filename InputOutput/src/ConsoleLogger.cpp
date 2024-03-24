@@ -8,10 +8,7 @@
 #include "ConsoleLogger.h"
 
 namespace input_output {
-    int ConsoleLogger::log(Logger::Level level, const char *format, ...) {
-        if (level < logLevel) {
-            return 0;
-        }
+    int ConsoleLogger::log(const char *format, ...) {
         va_list args;
         va_start(args, format);
         int result = vprintf(format, args);

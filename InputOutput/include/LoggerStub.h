@@ -13,7 +13,7 @@ namespace input_output {
 
     class LoggerStub : public Logger {
     public:
-        int log(Logger::Level level, const char *format, ...) override;
+        int log(const char *format, ...) override;
 
         void setLogLevel(Level level);
 

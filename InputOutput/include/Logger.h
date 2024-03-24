@@ -9,13 +9,7 @@ namespace input_output {
 
     class Logger {
     public:
-        enum class Level {
-            low,
-            medium,
-            high,
-        };
-
-        virtual int log(Logger::Level level, const char *format, ...) = 0;
+        virtual int log(const char *format, ...) = 0;
 
         virtual ~Logger() = default;
     };

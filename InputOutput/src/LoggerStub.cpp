@@ -8,10 +8,7 @@
 #include <cstdarg>
 
 namespace input_output {
-    int LoggerStub::log(Logger::Level level, const char *format, ...) {
-        if (level < logLevel) {
-            return 0;
-        }
+    int LoggerStub::log(const char *format, ...) {
         char buffer[BUF_SIZE];
         va_list args;
         va_start(args, format);

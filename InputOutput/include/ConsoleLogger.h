@@ -11,14 +11,11 @@ namespace input_output {
 
     class ConsoleLogger : public Logger {
     public:
-        explicit ConsoleLogger(Level level) : logLevel(level) {}
+        explicit ConsoleLogger() = default;
 
-        int log(Logger::Level level, const char *format, ...) override;
+        int log(const char *format, ...) override;
 
         ~ConsoleLogger() override = default;
-
-    private:
-        Level logLevel;
     };
 
 } // input_output

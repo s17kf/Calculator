@@ -108,22 +108,22 @@ namespace calculator {
             try {
                 auto result = calculator.calculate();
                 if (result.status != Result::Status::success) {
-                    logger.log(Logger::Level::high, "ERROR\n");
+                    logger.log("ERROR\n");
                     continue;
                 }
-                logger.log(Logger::Level::high, "%d\n", result.value);
+                logger.log("%d\n", result.value);
             } catch ([[maybe_unused]] std::exception &e) {
-                logger.log(Logger::Level::high, "Calculator error\n");
+                logger.log("Calculator error\n");
             }
         }
     }
 
     void Calculator::printCurrentOperation(Stack<int> &stack, Symbol *operation) {
-        mLogger.log(Logger::Level::medium, operation->str().c_str());
+        mLogger.log(operation->str().c_str());
         for (const auto &item: stack) {
-            mLogger.log(Logger::Level::medium, " %d", item);
+            mLogger.log(" %d", item);
         }
-        mLogger.log(Logger::Level::medium, "\n");
+        mLogger.log("\n");
     }
 
 } // calculator
