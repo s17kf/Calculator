@@ -7,9 +7,7 @@
 using data_structures::String;
 
 namespace input_output {
-    data_structures::String UserInputReaderImpl::getNextSymbol() {
-        char buffer[10];
-        scanf("%s", buffer);
-        return String(buffer);
+    void UserInputReaderImpl::getNextSymbol(char *dest) {
+        scanf("%s", dest);
     }
 } // input_output

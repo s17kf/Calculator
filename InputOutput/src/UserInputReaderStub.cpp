@@ -8,10 +8,11 @@
 using data_structures::String;
 
 namespace input_output {
-    data_structures::String UserInputReaderStub::getNextSymbol() {
+
+    void UserInputReaderStub::getNextSymbol(char *dest) {
         std::string s;
         stream >> s;
-        return String(s.c_str());
+        strcpy(dest, s.c_str());
     }
 
 } // input_output

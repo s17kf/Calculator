@@ -97,8 +97,9 @@ namespace calculator {
 
     void Calculator::handleUser(UserInputReader &userInputReader, Logger &logger) {
         int n;
-        String nStr = userInputReader.getNextSymbol();
-        std::from_chars(nStr.c_str(), nStr.c_str() + nStr.size(), n);
+        char nStr[10];
+        userInputReader.getNextSymbol(nStr);
+        std::from_chars(nStr, nStr + strlen(nStr), n);
 
         auto inputReader = InputReader(userInputReader);
         auto calculator = Calculator(inputReader, logger);

@@ -11,7 +11,7 @@ namespace input_output {
 
     class UserInputReaderImpl : public UserInputReader {
     public:
-        data_structures::String getNextSymbol() override;
+        void getNextSymbol(char *dest) override;
 
         ~UserInputReaderImpl() override = default;
     };

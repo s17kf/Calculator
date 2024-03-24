@@ -3,6 +3,7 @@
 //
 
 #include <cstring>
+#include <charconv>
 
 #include "InputReader.h"
 #include "Symbol.h"
@@ -13,8 +14,9 @@ using data_structures::String;
 namespace calculator {
 
     Symbol *InputReader::getNextSymbol() {
-        String input = userInputReader.getNextSymbol();
-        switch (input.c_str()[0]) {
+        char input[10];
+        userInputReader.getNextSymbol(input);
+        switch (input[0]) {
             case '.':
                 return new Symbol(TokenType::end, '.');
             case ',':
@@ -32,20 +34,17 @@ namespace calculator {
             case ')':
                 return new Symbol(TokenType::bracket, Bracket(Bracket::Type::right));
             case 'N':
-                if (strcmp(input.c_str(), "N") == 0)
-                    return new Symbol(TokenType::function, Function(Function::Type::negation));
+                return new Symbol(TokenType::function, Function(Function::Type::negation));
             case 'I':
-                if (strcmp(input.c_str(), "IF") == 0)
-                    return new Symbol(TokenType::function, Function(Function::Type::condition));
+                return new Symbol(TokenType::function, Function(Function::Type::condition));
             case 'M':
-                if (strcmp(input.c_str(), "MIN") == 0)
+                if (input[1] == 'I')
                     return new Symbol(TokenType::function, Function(Function::Type::min));
-                else if (strcmp(input.c_str(), "MAX") == 0)
+                else if (input[1] == 'A')
                     return new Symbol(TokenType::function, Function(Function::Type::max));
             default: {
                 int number;
-                // TODO: use from_chars
-                sscanf(input.c_str(), "%d", &number);
+                std::from_chars(input, input + strlen(input), number);
                 return new Symbol(TokenType::number, number);
             }
         }

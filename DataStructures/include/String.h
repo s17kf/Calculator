@@ -32,6 +32,10 @@ namespace data_structures {
 
         [[nodiscard]] constexpr const char *c_str() const { return str; }
 
+        [[nodiscard]] constexpr char operator[](unsigned int index) {
+            return str[index];
+        }
+
     private:
         explicit String(size_t n);
 

@@ -19,7 +19,7 @@ namespace input_output {
 
         void setInputString(std::string s) { stream.str(s); }
 
-        data_structures::String getNextSymbol() override;
+        void getNextSymbol(char *dest) override;
 
         ~UserInputReaderStub() override = default;
 

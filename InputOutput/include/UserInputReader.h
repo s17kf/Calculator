@@ -11,7 +11,7 @@ namespace input_output {
 
     class UserInputReader {
     public:
-        virtual data_structures::String getNextSymbol() = 0;
+        virtual void getNextSymbol(char *dest) = 0;
 
         virtual ~UserInputReader() = default;
     };
