@@ -16,6 +16,7 @@ namespace calculator {
         explicit InputReader(input_output::UserInputReader &userInputReader) : userInputReader(userInputReader) {}
 
         Symbol *getNextSymbol();
+        void wasteRestOfFormula();
 
     private:
         input_output::UserInputReader &userInputReader;

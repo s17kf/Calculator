@@ -6,7 +6,6 @@
 
 #include <charconv>
 
-#include "Stack.h"
 #include "List.h"
 #include "Logger.h"
 #include "String.h"
@@ -19,6 +18,57 @@ using input_output::Logger;
 using input_output::UserInputReader;
 
 namespace calculator {
+
+    void Calculator::execOperation(Operation &operation, Stack<int> &stack) {
+        auto a = stack.pop();
+        auto b = stack.pop();
+        stack.push(operation(a, b));
+    }
+
+    void Calculator::handleNegationsFromTopOfStack(Stack<Symbol *> &operatorStack, Stack<int> &resultStack) {
+        while (!operatorStack.empty() &&
+               operatorStack.top()->tokenType == TokenType::function &&
+               operatorStack.top()->token.function.type == Function::Type::negation) {
+            resultStack.push(-resultStack.pop());
+            delete operatorStack.pop();
+        }
+    }
+
+    void Calculator::handleFunction(Symbol *functionSymbol, Stack<int> &resultStack) {
+        unsigned int argc = functionSymbol->token.function.argc;
+        switch (functionSymbol->token.function.type) {
+            case Function::Type::condition: {
+                int c = resultStack.pop();
+                int b = resultStack.pop();
+                int a = resultStack.pop();
+                resultStack.push(a > 0 ? b : c);
+                break;
+            }
+            case Function::Type::negation:
+                resultStack.push(-resultStack.pop());
+                break;
+            case Function::Type::min: {
+                int currentMin = resultStack.pop();
+                while (--argc) {
+                    if (resultStack.top() < currentMin)
+                        currentMin = resultStack.top();
+                    resultStack.pop();
+                }
+                resultStack.push(currentMin);
+                break;
+            }
+            case Function::Type::max: {
+                int currentMax = resultStack.pop();
+                while (--argc) {
+                    if (resultStack.top() > currentMax)
+                        currentMax = resultStack.top();
+                    resultStack.pop();
+                }
+                resultStack.push(currentMax);
+                break;
+            }
+        }
+    }
 
     Result Calculator::calculate() {
         Stack<int> stack;
@@ -56,39 +106,7 @@ namespace calculator {
 #ifndef SILENT
                     printCurrentOperation(stack, symbol);
 #endif
-                    unsigned int argc = symbol->token.function.argc;
-                    switch (symbol->token.function.type) {
-                        case Function::Type::condition: {
-                            int c = stack.pop();
-                            int b = stack.pop();
-                            int a = stack.pop();
-                            stack.push(a > 0 ? b : c);
-                            break;
-                        }
-                        case Function::Type::negation:
-                            stack.push(-stack.pop());
-                            break;
-                        case Function::Type::min: {
-                            int currentMin = stack.pop();
-                            while (--argc) {
-                                if (stack.top() < currentMin)
-                                    currentMin = stack.top();
-                                stack.pop();
-                            }
-                            stack.push(currentMin);
-                            break;
-                        }
-                        case Function::Type::max: {
-                            int currentMax = stack.pop();
-                            while (--argc) {
-                                if (stack.top() > currentMax)
-                                    currentMax = stack.top();
-                                stack.pop();
-                            }
-                            stack.push(currentMax);
-                            break;
-                        }
-                    }
+                    handleFunction(symbol, stack);
                     delete symbol;
                     break;
                 }
@@ -99,6 +117,129 @@ namespace calculator {
             }
         }
         return {Result::Status::success, stack.top()};
+    }
+
+    Result Calculator::silentCalculate() {
+        Stack<Symbol *> operatorStack;
+        Stack<unsigned int *> argumentCounters;
+        Stack<int> resultStack;
+        Symbol *lastSymbol = mInputReader.getNextSymbol();
+        size_t symbolCounter = 0;
+        while (lastSymbol->tokenType != TokenType::end) {
+            ++symbolCounter;
+            switch (lastSymbol->tokenType) {
+                case TokenType::number:
+                    resultStack.push(lastSymbol->token.number);
+                    delete lastSymbol;
+                    handleNegationsFromTopOfStack(operatorStack, resultStack);
+                    break;
+                case TokenType::operation: {
+                    while (!operatorStack.empty() &&
+                           operatorStack.top()->tokenType == TokenType::operation &&
+                           lastSymbol->token.operation.prio() <= operatorStack.top()->token.operation.prio()) {
+                        Symbol *operationToExec = operatorStack.pop();
+                        try {
+                            execOperation(operationToExec->token.operation, resultStack);
+                        } catch (std::overflow_error &e) {
+                            delete lastSymbol;
+                            delete operationToExec;
+                            while (!operatorStack.empty())
+                                delete operatorStack.pop();
+                            mInputReader.wasteRestOfFormula();
+                            return {Result::Status::error, 0};
+                        }
+                        delete operationToExec;
+                    }
+                    operatorStack.push(lastSymbol);
+                    break;
+                }
+                case TokenType::function:
+                    operatorStack.push(lastSymbol);
+                    if (lastSymbol->token.function.type != Function::Type::negation) {
+                        argumentCounters.push(&lastSymbol->token.function.argc);
+                    }
+                    break;
+                case TokenType::bracket:
+                    if (lastSymbol->token.bracket.type == Bracket::Type::left) {
+                        operatorStack.push(lastSymbol);
+                    } else {
+                        while (operatorStack.top()->tokenType != TokenType::bracket) {
+                            // don't need to check bracket direction because only left brackets are added to operatorStack
+                            if (operatorStack.top()->tokenType == TokenType::operation) {
+                                Symbol *operationToExec = operatorStack.pop();
+                                try {
+                                    execOperation(operationToExec->token.operation, resultStack);
+                                } catch (std::overflow_error &e) {
+                                    delete lastSymbol;
+                                    delete operationToExec;
+                                    while (!operatorStack.empty())
+                                        delete operatorStack.pop();
+                                    mInputReader.wasteRestOfFormula();
+                                    return {Result::Status::error, 0};
+                                }
+                                delete operationToExec;
+                            } else {
+                                // it has to be negation as its only function which doesn't need brackets
+                                delete operatorStack.pop();
+                                resultStack.push(-resultStack.pop());
+                            }
+                        }
+                        delete operatorStack.pop();
+                        if (!operatorStack.empty() && operatorStack.top()->tokenType == TokenType::function) {
+                            handleFunction(operatorStack.top(), resultStack);
+                            if (operatorStack.top()->token.function.type != Function::Type::negation) {
+                                argumentCounters.pop();
+                            }
+                            delete operatorStack.pop();
+                        }
+                        handleNegationsFromTopOfStack(operatorStack, resultStack);
+                        delete lastSymbol;
+                    };
+                    break;
+                case TokenType::comma: {
+                    Symbol *symbolToHandle = operatorStack.top();
+                    while (symbolToHandle->tokenType != TokenType::bracket) {
+                        if (symbolToHandle->tokenType == TokenType::operation) {
+                            try {
+                                execOperation(symbolToHandle->token.operation, resultStack);
+                            } catch (std::overflow_error &e) {
+                                delete lastSymbol;
+                                while (!operatorStack.empty())
+                                    delete operatorStack.pop();
+                                mInputReader.wasteRestOfFormula();
+                                return {Result::Status::error, 0};
+                            }
+                        } else if (symbolToHandle->tokenType == TokenType::function) {
+                            // it has to be negation as its only function which doesn't need brackets
+                            resultStack.push(-resultStack.pop());
+                        }
+                        delete symbolToHandle;
+                        operatorStack.pop();
+                        symbolToHandle = operatorStack.top();
+                    }
+                    if (!argumentCounters.empty())
+                        ++(*argumentCounters.top());
+                    delete lastSymbol;
+                    break;
+                }
+                case TokenType::end:
+                    throw std::out_of_range("encountered EOF symbol ('.')");
+            }
+            lastSymbol = mInputReader.getNextSymbol();
+        }
+        delete lastSymbol;
+        while (!operatorStack.empty()) {
+            // missing check of symbol's type as only operations should left on stack at this point
+            try {
+                execOperation(operatorStack.top()->token.operation, resultStack);
+            } catch (std::overflow_error &e) {
+                while (!operatorStack.empty())
+                    delete operatorStack.pop();
+                return {Result::Status::error, 0};
+            }
+            delete operatorStack.pop();
+        }
+        return {Result::Status::success, resultStack.top()};
     }
 
     void Calculator::handleUser(UserInputReader &userInputReader, Logger &logger) {
@@ -112,14 +253,18 @@ namespace calculator {
 
         for (unsigned int i = 0; i < n; ++i) {
             try {
+#ifndef SILENT
                 auto result = calculator.calculate();
+#else
+                auto result = calculator.silentCalculate();
+#endif
                 if (result.status != Result::Status::success) {
                     logger.log("ERROR\n");
                     continue;
                 }
                 logger.log("%d\n", result.value);
             } catch ([[maybe_unused]] std::exception &e) {
-                logger.log("Calculator error\n");
+                logger.log("Calculator error %s\n", e.what());
             }
         }
     }

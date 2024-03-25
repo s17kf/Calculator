@@ -50,4 +50,13 @@ namespace calculator {
         }
     }
 
+    void InputReader::wasteRestOfFormula() {
+        Symbol *lastSymbol = getNextSymbol();
+        while(lastSymbol->tokenType != TokenType::end) {
+            delete lastSymbol;
+            lastSymbol = getNextSymbol();
+        }
+        delete lastSymbol;
+    }
+
 } // calculator

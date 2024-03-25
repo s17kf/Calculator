@@ -11,9 +11,6 @@
 #include "Symbol.h"
 #include "Logger.h"
 
-//#include "QueueVector.h"
-//#include "StackVector.h"
-
 namespace calculator {
 
     class InputConverter {

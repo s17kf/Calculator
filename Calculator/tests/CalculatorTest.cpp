@@ -129,6 +129,42 @@ TEST_F(CalculatorTest, calculationGivesProperResults4) {
     ASSERT_EQ(expectedOutput, loggerStub.str());
 }
 
+TEST_F(CalculatorTest, silentCalculationGivesProperResult) {
+    const std::string inputExpression =
+            "MIN ( 100 , MAX ( 1 , 34 , 2 ) , 80 ,  MIN ( 66 , 36  , 35 , 77 ) , 50 , 60 ) .";
+    userInputReaderStub.setInputString(inputExpression);
+    const std::string expectedOutput;
+
+    auto result = calculator->silentCalculate();
+    ASSERT_EQ(Result::Status::success, result.status);
+    ASSERT_EQ(34, result.value);
+    ASSERT_EQ(expectedOutput, loggerStub.str());
+}
+
+TEST_F(CalculatorTest, silentCalculationGivesProperResult2) {
+    const std::string inputExpression =
+            "2 + MIN ( 100 , MAX ( 1 , 6 * 5 + 2 , 2 ) , 80 ,  MIN ( 66 , 36  , 35 , 77 ) , 50 , 60 ) * 3 .";
+    userInputReaderStub.setInputString(inputExpression);
+    const std::string expectedOutput;
+
+    auto result = calculator->silentCalculate();
+    ASSERT_EQ(Result::Status::success, result.status);
+    ASSERT_EQ(98, result.value);
+    ASSERT_EQ(expectedOutput, loggerStub.str());
+}
+
+TEST_F(CalculatorTest, silentCalculationGivesProperResult4) {
+    const std::string inputExpression =
+    "IF ( ( 6 + 8 ) , ( 4 / 2 ) , MIN ( 8 , 2 , 1 , 0 , 3 ) ) * 2 * 6 / N ( 3 ) .";
+    userInputReaderStub.setInputString(inputExpression);
+    const std::string expectedOutput;
+
+    auto result = calculator->silentCalculate();
+    ASSERT_EQ(Result::Status::success, result.status);
+    ASSERT_EQ(-8, result.value);
+    ASSERT_EQ(expectedOutput, loggerStub.str());
+}
+
 TEST_F(CalculatorTest, calculationThrowsDivisionByZero) {
     const std::string inputExpression =
             "MIN ( MIN ( IF ( 0 , 8 , 2 ) ) , MAX ( MIN ( 9 ) , 4 + 9 ) , ( IF ( 3 , 9 , 9 ) / "
