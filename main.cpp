@@ -1,6 +1,6 @@
-#include <iostream>
 #include "Calculator.h"
 #include "ConsoleLogger.h"
+
 #include "UserInputReaderImpl.h"
 
 using input_output::ConsoleLogger;

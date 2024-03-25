@@ -36,7 +36,6 @@ set(CALCULATOR_TEST_SOURCES
 )
 
 set(MAIN_SOURCES
-        main.cpp
         Calculator/src/Calculator.cpp
         Calculator/src/InputConverter.cpp
         Calculator/src/InputReader.cpp
@@ -46,10 +45,11 @@ set(MAIN_SOURCES
         InputOutput/src/UserInputReaderImpl.cpp
 )
 
-add_executable(CalculatorAads ${MAIN_SOURCES})
+add_executable(CalculatorAads main.cpp ${MAIN_SOURCES})
 
 add_subdirectory(googletest)
-link_libraries(gmock)
 
 add_executable(DataStructuresTests ${DATA_STRUCTURES_TEST_SOURCES})
 add_executable(CalculatorTests ${CALCULATOR_TEST_SOURCES})
+target_link_libraries(DataStructuresTests gmock)
+target_link_libraries(CalculatorTests gmock)

@@ -14,6 +14,8 @@
 #include "Logger.h"
 #include "UserInputReader.h"
 
+//#define SILENT
+
 namespace calculator {
 
     struct Result {
