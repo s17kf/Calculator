@@ -18,10 +18,6 @@ namespace input_output {
         return result;
     }
 
-    void LoggerStub::setLogLevel(Logger::Level level) {
-        logLevel = level;
-    }
-
     void LoggerStub::reset() {
         stream.str("");
     }
