@@ -14,32 +14,34 @@ namespace data_structures {
     public:
         String(const String &other);
 
+        explicit String(size_t n);
+
         explicit String(char c);
 
         explicit String(const char *s = nullptr);
 
         ~String() {
-            delete[] str;
+            delete[] mStr;
         }
 
         String &operator=(const String &other);
 
-        [[nodiscard]] size_t size() const { return strlen(str); }
+        [[nodiscard]] size_t size() const { return mSize; }
 
         String operator+(const String &other) const;
 
         String operator+(int number) const;
 
-        [[nodiscard]] constexpr const char *c_str() const { return str; }
+        [[nodiscard]] constexpr const char *c_str() const { return mStr; }
 
         [[nodiscard]] constexpr char operator[](unsigned int index) {
-            return str[index];
+            return mStr[index];
         }
 
     private:
-        explicit String(size_t n);
-
-        char *str;
+        size_t mSize;
+        size_t mCapacity;
+        char *mStr;
     };
 
 } // data_structures
