@@ -40,10 +40,14 @@ TEST_F(CalculatorTest, calculationGivesProperResults) {
             "MIN ( 100 , MAX ( 1 , 34 , 2 ) , 80 ,  MIN ( 66 , 36  , 35 , 77 ) , 50 , 60 ) .";
     userInputReaderStub.setInputString(inputExpression);
     const std::string expectedOutput =
+#ifndef SILENT
             "100  1  34  2  MAX3  80  66  36  35  77  MIN4  50  60  MIN6\n"
             "MAX3 2 34 1 100\n"
             "MIN4 77 35 36 66 80 34 100\n"
             "MIN6 60 50 35 80 34 100\n";
+#else
+            "";
+#endif
 
     auto result = calculator->calculate();
     ASSERT_EQ(Result::Status::success, result.status);
@@ -56,6 +60,7 @@ TEST_F(CalculatorTest, calculationGivesProperResults2) {
             "2 + MIN ( 100 , MAX ( 1 , 6 * 5 + 2 , 2 ) , 80 ,  MIN ( 66 , 36  , 35 , 77 ) , 50 , 60 ) * 3 .";
     userInputReaderStub.setInputString(inputExpression);
     const std::string expectedOutput =
+#ifndef SILENT
             "2  100  1  6  5  *  2  +  2  MAX3  80  66  36  35  77  MIN4  50  60  MIN6  3  *  +\n"
             "* 5 6 1 100 2\n"
             "+ 2 30 1 100 2\n"
@@ -64,6 +69,9 @@ TEST_F(CalculatorTest, calculationGivesProperResults2) {
             "MIN6 60 50 35 80 32 100 2\n"
             "* 3 32 2\n"
             "+ 96 2\n";
+#else
+            "";
+#endif
 
     auto result = calculator->calculate();
     ASSERT_EQ(Result::Status::success, result.status);
@@ -76,6 +84,7 @@ TEST_F(CalculatorTest, calculationGivesProperResults3) {
             "N 400 + ( 11 - ( 3 * 2 ) ) / 2 + N N 200 .";
     userInputReaderStub.setInputString(inputExpression);
     const std::string expectedOutput =
+#ifndef SILENT
             "400  N  11  3  2  *  -  2  /  +  200  N  N  +\n"
             "N 400\n"
             "* 2 3 11 -400\n"
@@ -85,6 +94,9 @@ TEST_F(CalculatorTest, calculationGivesProperResults3) {
             "N 200 -398\n"
             "N -200 -398\n"
             "+ 200 -398\n";
+#else
+            "";
+#endif
 
     auto result = calculator->calculate();
     ASSERT_EQ(Result::Status::success, result.status);
@@ -97,6 +109,7 @@ TEST_F(CalculatorTest, calculationGivesProperResults4) {
             "IF ( ( 6 + 8 ) , ( 4 / 2 ) , MIN ( 8 , 2 , 1 , 0 , 3 ) ) * 2 * 6 / N ( 3 ) .";
     userInputReaderStub.setInputString(inputExpression);
     const std::string expectedOutput =
+#ifndef SILENT
             "6  8  +  4  2  /  8  2  1  0  3  MIN5  IF  2  *  6  *  3  N  /\n"
             "+ 8 6\n"
             "/ 2 4 14\n"
@@ -106,6 +119,9 @@ TEST_F(CalculatorTest, calculationGivesProperResults4) {
             "* 6 4\n"
             "N 3 24\n"
             "/ -3 24\n";
+#else
+            "";
+#endif
 
     auto result = calculator->calculate();
     ASSERT_EQ(Result::Status::success, result.status);
@@ -119,6 +135,7 @@ TEST_F(CalculatorTest, calculationThrowsDivisionByZero) {
             "MIN ( 7 , 0 , 6 , 2 , 1 ) ) , N ( 3 + 4 ) , 1 * 1 + IF ( 1 , 9 , 2 ) ) .";
     userInputReaderStub.setInputString(inputExpression);
     const std::string expectedOutput =
+#ifndef SILENT
             "0  8  2  IF  MIN1  9  MIN1  4  9  +  MAX2  3  9  9  IF  7  0  6  2  1  MIN5  /  3  "
             "4  +  N  1  1  *  1  9  2  IF  +  MIN5\n"
             "IF 2 8 0\n"
@@ -129,6 +146,9 @@ TEST_F(CalculatorTest, calculationThrowsDivisionByZero) {
             "IF 9 9 3 13 2\n"
             "MIN5 1 2 6 0 7 9 13 2\n"
             "/ 0 9 13 2\n";
+#else
+            "";
+#endif
 
 //    ASSERT_THROW(calculator->calculate(), std::overflow_error);
     auto result = calculator->calculate();

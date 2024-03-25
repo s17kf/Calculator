@@ -14,7 +14,7 @@
 #include "Logger.h"
 #include "UserInputReader.h"
 
-//#define SILENT
+#define SILENT
 
 namespace calculator {
 
