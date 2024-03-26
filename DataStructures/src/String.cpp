@@ -9,12 +9,13 @@
 namespace data_structures {
 
     String::String(const String &other) : mSize(other.mSize), mCapacity(other.mCapacity) {
-        mStr = new char[strlen(other.mStr) + 1];
-        strncpy(mStr, other.mStr, strlen(other.mStr) + 1);
+        mStr = new char[mCapacity + 1];
+        mStr[mCapacity] = '\0';
+        strncpy(mStr, other.mStr, mSize);
     }
 
     String::String(const char c) : mSize(1), mCapacity(1) {
-        mStr = new char [2] {c, '\0'};
+        mStr = new char[2]{c, '\0'};
     }
 
     String::String(const char *s) {
@@ -39,14 +40,16 @@ namespace data_structures {
         if (this == &other)
             return *this;
         delete[] mStr;
-        mStr = new char [other.size()];
-        strncpy(mStr, other.mStr, other.size()+1);
+        mStr = new char[other.size() + 1];
+        strncpy(mStr, other.mStr, other.size() + 1);
+        mSize = other.size();
+        mCapacity = other.mCapacity;
         return *this;
     }
 
     String String::operator+(const String &other) const {
         String result(size() + other.size() + 1);
-        strncpy(result.mStr, mStr ,size());
+        strncpy(result.mStr, mStr, size());
         strncpy(&result.mStr[size()], other.mStr, other.size() + 1);
         result.mSize = mSize + other.mSize;
         return result;
@@ -55,10 +58,11 @@ namespace data_structures {
     String String::operator+=(const String &other) {
         if (mCapacity < mSize + other.size()) {
             char *oldStr = mStr;
-            mStr = new char[mSize + 1];
             mCapacity = mSize + other.size();
-            strncpy(mStr, oldStr, mSize+1);
-            delete oldStr;
+            mStr = new char[mCapacity + 1];
+            mStr[mCapacity] = '\0';
+            strncpy(mStr, oldStr, mSize + 1);
+            delete[] oldStr;
             strncpy(&mStr[mSize], other.mStr, other.size());
             mSize = mCapacity;
         } else {
@@ -74,7 +78,7 @@ namespace data_structures {
         size_t numSize = strlen(numberStr);
         String result(size() + numSize);
         result.mSize = mSize + numSize;
-        strncpy(result.mStr, mStr ,size());
+        strncpy(result.mStr, mStr, size());
         strncpy(&result.mStr[size()], numberStr, strlen(numberStr) + 1);
         return result;
     }
