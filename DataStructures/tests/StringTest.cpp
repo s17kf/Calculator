@@ -43,6 +43,30 @@ TEST_F(StringTest, stringConcatenation) {
     ASSERT_EQ(0, std::strcmp(expectedResult, result.c_str()));
 }
 
+TEST_F(StringTest, stringSelfConcatenation) {
+    String s1("text");
+    const String s2 = String("other");
+    const char expectedResult[] = "textother";
+    const size_t expectedSize = s1.size() + s2.size();
+    s1 += s2;
+    ASSERT_EQ(expectedSize, s1.size());
+    ASSERT_EQ(0, std::strcmp(expectedResult, s1.c_str()));
+}
+
+//TEST_F(StringTest, stringSelfConcatenationWithCapacityInitialization) {
+//    String testedString((size_t)50);
+//    const String s1("text");
+//    const String s2 = String("other");
+//    const char expectedResult[] = "textother";
+//    const size_t expectedSize = s1.size() + s2.size();
+//    testedString += s1;
+//    ASSERT_EQ(s1.size(), testedString.size());
+//    ASSERT_EQ(0, std::strcmp(s1.c_str(), testedString.c_str()));
+//    testedString += s2;
+//    ASSERT_EQ(expectedSize, testedString.size());
+//    ASSERT_EQ(0, std::strcmp(expectedResult, testedString.c_str()));
+//}
+
 TEST_F(StringTest, stringAndNumberConcatenation) {
     const String s("str");
     const int oneDigitNumber = 5;

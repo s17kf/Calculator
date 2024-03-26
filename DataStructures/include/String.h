@@ -30,6 +30,8 @@ namespace data_structures {
 
         String operator+(const String &other) const;
 
+        String operator+=(const String &other);
+
         String operator+(int number) const;
 
         [[nodiscard]] constexpr const char *c_str() const { return mStr; }

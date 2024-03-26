@@ -52,6 +52,22 @@ namespace data_structures {
         return result;
     }
 
+    String String::operator+=(const String &other) {
+        if (mCapacity < mSize + other.size()) {
+            char *oldStr = mStr;
+            mStr = new char[mSize + 1];
+            mCapacity = mSize + other.size();
+            strncpy(mStr, oldStr, mSize+1);
+            delete oldStr;
+            strncpy(&mStr[mSize], other.mStr, other.size());
+            mSize = mCapacity;
+        } else {
+            strncpy(&mStr[mSize], other.mStr, other.size() + 1);
+            mSize += other.mSize;
+        }
+        return *this;
+    }
+
     String String::operator+(int number) const {
         char numberStr[8] = {};
         std::to_chars(numberStr, numberStr + 8, number);
