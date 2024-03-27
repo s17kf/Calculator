@@ -26,7 +26,7 @@ namespace data_structures {
 
         String &operator=(const String &other);
 
-        [[nodiscard]] size_t size() const { return mSize; }
+        [[nodiscard]] constexpr size_t size() const { return mSize; }
 
         String operator+(const String &other) const;
 
@@ -34,11 +34,15 @@ namespace data_structures {
 
         String operator+(int number) const;
 
+        String operator+=(int number);
+
         [[nodiscard]] constexpr const char *c_str() const { return mStr; }
 
         [[nodiscard]] constexpr char operator[](unsigned int index) {
             return mStr[index];
         }
+
+        void rstrip();
 
     private:
         size_t mSize;

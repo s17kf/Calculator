@@ -11,7 +11,7 @@ namespace data_structures {
     String::String(const String &other) : mSize(other.mSize), mCapacity(other.mCapacity) {
         mStr = new char[mCapacity + 1];
         mStr[mCapacity] = '\0';
-        strncpy(mStr, other.mStr, mSize);
+        strncpy(mStr, other.mStr, mSize + 1);
     }
 
     String::String(const char c) : mSize(1), mCapacity(1) {
@@ -40,7 +40,7 @@ namespace data_structures {
         if (this == &other)
             return *this;
         delete[] mStr;
-        mStr = new char[other.size() + 1];
+        mStr = new char[other.mCapacity + 1];
         strncpy(mStr, other.mStr, other.size() + 1);
         mSize = other.size();
         mCapacity = other.mCapacity;
@@ -77,10 +77,39 @@ namespace data_structures {
         std::to_chars(numberStr, numberStr + 8, number);
         size_t numSize = strlen(numberStr);
         String result(size() + numSize);
-        result.mSize = mSize + numSize;
         strncpy(result.mStr, mStr, size());
-        strncpy(&result.mStr[size()], numberStr, strlen(numberStr) + 1);
+        strncpy(&result.mStr[size()], numberStr, numSize + 1);
+        result.mSize = mSize + numSize;
         return result;
+    }
+
+    String String::operator+=(int number) {
+        char numberStr[8] = {};
+        std::to_chars(numberStr, numberStr + 8, number);
+        size_t numSize = strlen(numberStr);
+        if (mCapacity < mSize + numSize) {
+            char *oldStr = mStr;
+            mCapacity = mSize + numSize;
+            mStr = new char[mCapacity + 1];
+            mStr[mCapacity] = '\0';
+            strncpy(mStr, oldStr, mSize + 1);
+            delete[] oldStr;
+            strncpy(&mStr[mSize], numberStr, numSize + 1);
+            mSize = mCapacity;
+        } else {
+            strncpy(&mStr[mSize], numberStr, numSize + 1);
+            mSize += numSize;
+        }
+        return *this;
+    }
+
+    void String::rstrip() {
+        int current = size() - 1;
+        while (current >= 0 && mStr[current] == ' '){
+            mStr[current] = '\0';
+            --mSize;
+            --current;
+        }
     }
 
 } // data_structures
