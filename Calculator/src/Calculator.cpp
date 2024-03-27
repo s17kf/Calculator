@@ -73,9 +73,7 @@ namespace calculator {
     Result Calculator::calculate() {
         Stack<int> stack;
         mInputConverter.convertFormula();
-#ifndef SILENT
         mInputConverter.printOutputQueue(mLogger);
-#endif
         while (mInputConverter.symbolsLeft()) {
             Symbol *symbol = mInputConverter.removeNextSymbol();
             switch (symbol->tokenType) {
@@ -84,9 +82,7 @@ namespace calculator {
                     delete symbol;
                     break;
                 case TokenType::operation: {
-#ifndef SILENT
                     printCurrentOperation(stack, symbol);
-#endif
                     int a = stack.pop();
                     int b = stack.pop();
                     try {
@@ -103,9 +99,7 @@ namespace calculator {
                     break;
                 }
                 case TokenType::function: {
-#ifndef SILENT
                     printCurrentOperation(stack, symbol);
-#endif
                     handleFunction(symbol, stack);
                     delete symbol;
                     break;
